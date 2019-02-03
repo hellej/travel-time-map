@@ -2,7 +2,7 @@ import React from 'react'
 import MapboxGL from 'mapbox-gl/dist/mapbox-gl.js'
 import { connect } from 'react-redux'
 import { initializeMap, updateCamera } from './../../reducers/mapReducer'
-import * as constants from './../../constants'
+import { initialMapCenter, BASEMAPS } from './../../constants'
 
 MapboxGL.accessToken = process.env.REACT_APP_MB_ACCESS || 'Mapbox token is needed in order to use the map'
 
@@ -14,7 +14,6 @@ class Map extends React.Component {
       isReady: false,
       loaded: false,
       flying: false,
-      initialCenter: { lng: 24.935486, lat: 60.215779 }
     }
   }
 
@@ -26,8 +25,8 @@ class Map extends React.Component {
 
     this.map = new MapboxGL.Map({
       container: this.mapContainer,
-      style: constants.BASEMAPS['Streets'].url,
-      center: this.state.initialCenter,
+      style: BASEMAPS['JustBlack'].url,
+      center: initialMapCenter,
       zoom: 10,
       boxZoom: false,
       scrollZoom: false,
@@ -45,7 +44,7 @@ class Map extends React.Component {
     this.map.on('load', () => {
       console.log('map loaded')
       this.map.fire('flystart')
-      this.map.flyTo({ center: this.state.initialCenter, speed: 0.1, curve: 1, zoom: 10.15, maxDuration: 1500 })
+      this.map.flyTo({ center: initialMapCenter, speed: 0.1, curve: 1, zoom: 10.15, maxDuration: 1500 })
       this.setState({ loaded: true, isReady: true })
       this.map.addControl(new MapboxGL.NavigationControl(), 'bottom-right')
       this.props.initializeMap()

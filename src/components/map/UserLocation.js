@@ -18,14 +18,16 @@ class UserLocation extends React.Component {
         const { map, geoJSONFC } = this.props
         map.once('load', () => {
             map.addSource(this.layerId, { type: 'geojson', data: geoJSONFC })
-            map.addLayer({ id: this.layerId, source: this.layerId, type: 'circle', paint: this.circleStyle })
             this.source = map.getSource(this.layerId)
+            map.addLayer({ id: this.layerId, source: this.layerId, type: 'circle', paint: this.circleStyle })
         })
     }
 
     componentDidUpdate = () => {
         if (this.source !== undefined) {
             this.source.setData(this.props.geoJSONFC)
+        } else {
+            this.props.map.once('sourcedata', () => this.source.setData(this.props.geoJSONFC))
         }
     }
 

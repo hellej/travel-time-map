@@ -20,7 +20,6 @@ export const getBbox = (geojsonFeature) => {
   return bbox(geojsonFeature)
 }
 
-export const getCircle = (center, radius) => {
-  const options = { steps: 64, units: 'meters' }
-  return circle(center, radius, options)
+export const getCircle = (center, options) => {
+  return circle(center, options.radius, { steps: 120, units: 'meters', properties: options })
 }

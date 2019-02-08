@@ -21,7 +21,8 @@ const userLocationReducer = (store = initialTtZones, action) => {
 
 const createCicles = (lngLat) => {
     const circles = circleRadiuses.reduce((acc, value) => {
-        return acc.concat(turf.getCircle([lngLat.lng, lngLat.lat], value))
+        const label = String(value/100).concat(' min')
+        return acc.concat(turf.getCircle([lngLat.lng, lngLat.lat], { radius: value, zoneLabel: label }))
     }, [])
     return turf.asFeatureCollection(circles)
 }

@@ -7,7 +7,7 @@ class TravelTimeZones extends React.Component {
     layerId = 'travelTimeZones'
     lineStyle = {
         'line-color': 'white',
-        'line-width': 2
+        'line-width': 1
     }
 
     componentDidMount() {
@@ -15,7 +15,30 @@ class TravelTimeZones extends React.Component {
         map.once('load', () => {
             map.addSource(this.layerId, { type: 'geojson', data: geoJSONFC })
             this.source = map.getSource(this.layerId)
-            map.addLayer({ id: this.layerId, source: this.layerId, type: 'line', paint: this.lineStyle })
+            map.addLayer({
+                id: this.layerId,
+                source: this.layerId,
+                type: 'line',
+                paint: this.lineStyle,
+            })
+            map.addLayer({
+                'id': 'travelTimeZonesLabels',
+                'type': 'symbol',
+                'source': this.layerId,
+                'layout': {
+                    'symbol-placement': 'line',
+                    'text-font': ['Open Sans Regular'],
+                    'text-field': '{zoneLabel}',
+                    'text-size': 14,
+                    'symbol-spacing': 150,
+
+                },
+                'paint': {
+                    'text-color': 'white',
+                    'text-halo-color': 'black',
+                    'text-halo-width': 2
+                }
+            })
         })
     }
 

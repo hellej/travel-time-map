@@ -9,7 +9,7 @@ const initialUserLocation = {
   expireTime: '',
   error: null,
   geoJSON: null,
-  geoJSONFC: null,
+  geoJSONFC: turf.asFeatureCollection([]),
   locationHistory: [],
 }
 const geoError = () => {

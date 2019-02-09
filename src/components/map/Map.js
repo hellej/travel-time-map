@@ -85,8 +85,6 @@ class Map extends React.Component {
     if (!this.map) return
     this.forceUpdate()
     setTimeout(() => { this.resizeMap() }, 300)
-    // const vh = Math.min(window.screen.availHeight, window.innerHeight, document.documentElement.clientHeight) * 0.01
-    // document.documentElement.style.setProperty('--vh', `${vh}px`)
   }
 
   resizeMap = () => {

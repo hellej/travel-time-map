@@ -29,7 +29,6 @@ class Map extends React.Component {
       center: initialMapCenter,
       zoom: 10,
       boxZoom: false,
-      scrollZoom: false,
       trackResize: true
     })
 
@@ -43,27 +42,15 @@ class Map extends React.Component {
 
     this.map.on('load', () => {
       console.log('map loaded')
-      this.map.fire('flystart')
-      this.map.flyTo({ center: initialMapCenter, speed: 0.1, curve: 1, zoom: 10.15, maxDuration: 1500 })
       this.setState({ loaded: true, isReady: true })
       this.map.addControl(new MapboxGL.NavigationControl(), 'bottom-right')
       this.props.initializeMap()
     })
 
     this.map.on('moveend', () => {
-      if (this.state.flying) this.map.fire('flyend')
       this.props.updateCamera(this.map.getCenter(), this.map.getZoom())
     })
 
-    this.map.on('flystart', () => {
-      this.map.scrollZoom.disable()
-      this.setState({ flying: true })
-    })
-
-    this.map.on('flyend', () => {
-      this.map.scrollZoom.enable()
-      this.setState({ flying: false })
-    })
   }
 
   componentDidUpdate(prevProps, prevState) {

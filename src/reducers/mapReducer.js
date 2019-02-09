@@ -1,10 +1,8 @@
-//import { turf } from '../utils/index'
+import { turf } from '../utils/index'
 
 const initialMapState = {
-  basemap: 'Streets',
   initialized: false,
-  camera3d: false,
-  zoomToBbox: null,
+  zoomToBbox: [],
   center: {},
   zoom: 0,
   mouseOnFeature: null,
@@ -17,8 +15,8 @@ const mapReducer = (store = initialMapState, action) => {
     case 'INITIALIZE_MAP':
       return { ...store, initialized: true }
 
-    case 'SET_BASEMAP':
-      return { ...store, basemap: action.basemap }
+    case 'ZOOM_TO_FEATURE':
+      return { ...store, zoomToBbox: turf.getBbox(turf.getBuffer(action.feature, 1000)) }
 
     case 'UPDATE_CAMERA':
       return { ...store, center: action.center, zoom: action.zoom }

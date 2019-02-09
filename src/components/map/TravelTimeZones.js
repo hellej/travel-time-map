@@ -31,7 +31,6 @@ class TravelTimeZones extends React.Component {
                     'text-field': '{zoneLabel}',
                     'text-size': 14,
                     'symbol-spacing': 150,
-
                 },
                 'paint': {
                     'text-color': 'white',

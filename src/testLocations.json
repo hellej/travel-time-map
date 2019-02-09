@@ -1,0 +1,70 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Kamppi"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    24.933128356933594,
+                    60.16910312640248
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Steissi"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    24.94147539138794,
+                    60.17096567679071
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Kumpulan kampus"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    24.96271848678589,
+                    60.20471876703638
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Koskela"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    24.970110654830933,
+                    60.21750045894364
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Redi"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    24.978328943252563,
+                    60.187633201945786
+                ]
+            }
+        }
+    ]
+}

@@ -6,9 +6,9 @@ class MapControl extends React.Component {
     componentDidUpdate = async (prevProps) => {
         const { map } = this.props
 
-        const { locationHistory } = this.props.userLocation
-        if (locationHistory.length === 1 && prevProps.userLocation.locationHistory.length === 0) {
-            map.easeTo({ center: locationHistory[0], zoom: 11.3 })
+        const { userLocHistory } = this.props.userLocation
+        if (userLocHistory.length === 1 && prevProps.userLocation.userLocHistory.length === 0) {
+            map.easeTo({ center: userLocHistory[0], zoom: 11.3 })
         }
     }
     render() { return null }

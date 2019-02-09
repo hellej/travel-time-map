@@ -11,7 +11,7 @@ const userLocationReducer = (store = initialTtZones, action) => {
         case 'UPDATE_USER_LOCATION': {
             return {
                 ...store,
-                ttZonesFC: createCicles(action.lngLat)
+                ttZonesFC: createCicles(action.coords)
             }
         }
         default:
@@ -19,10 +19,10 @@ const userLocationReducer = (store = initialTtZones, action) => {
     }
 }
 
-const createCicles = (lngLat) => {
+const createCicles = (coords) => {
     const circles = circleRadiuses.reduce((acc, value) => {
-        const label = String(value/100).concat(' min')
-        return acc.concat(turf.getCircle([lngLat.lng, lngLat.lat], { radius: value, zoneLabel: label }))
+        const label = String(value / 100).concat(' min')
+        return acc.concat(turf.getCircle([coords[0], coords[1]], { radius: value, zoneLabel: label }))
     }, [])
     return turf.asFeatureCollection(circles)
 }

@@ -8,9 +8,8 @@ const geoOptions = {
 const initialUserLocation = {
   expireTime: '',
   error: null,
-  geoJSON: null,
   geoJSONFC: turf.asFeatureCollection([]),
-  locationHistory: [],
+  userLocHistory: [],
 }
 const geoError = () => {
   console.log('no location available')
@@ -20,12 +19,10 @@ const userLocationReducer = (store = initialUserLocation, action) => {
 
   switch (action.type) {
     case 'UPDATE_USER_LOCATION': {
-      const locationHistory = store.locationHistory
       return {
         ...store,
-        locationHistory: locationHistory.concat(action.lngLat),
-        geoJSON: action.geoJSON,
         geoJSONFC: action.geoJSONFC,
+        userLocHistory: store.userLocHistory.concat([action.coords]),
       }
     }
     case 'RESET_USER_LOCATION':
@@ -48,12 +45,10 @@ export const updateUserLocation = () => {
     const watchPosition = (pos) => {
       const lng = pos.coords.longitude
       const lat = pos.coords.latitude
-      const geoJSON = turf.asPoint([lng, lat])
-      const geoJSONFC = turf.asFeatureCollection([geoJSON])
+      const geoJSONFC = turf.asFeatureCollection([turf.asPoint([lng, lat])])
       dispatch({
         type: 'UPDATE_USER_LOCATION',
-        lngLat: { lng, lat },
-        geoJSON,
+        coords: [lng, lat],
         geoJSONFC,
       })
     }

@@ -4,14 +4,8 @@ import UserLocation from './components/map/UserLocation'
 import TravelTimeZones from './components/map/TravelTimeZones'
 import Targets from './components/map/Targets'
 import MapControl from './components/map/MapControl'
-import { connect } from 'react-redux'
-import { updateTargets } from './reducers/targetsReducer'
 
 class App extends Component {
-
-  componentDidMount() {
-    this.props.updateTargets()
-  }
 
   render() {
     return (
@@ -27,5 +21,4 @@ class App extends Component {
   }
 }
 
-const ConnectedApp = connect(null, { updateTargets })(App)
-export default ConnectedApp
+export default App

@@ -6,8 +6,8 @@ import bearing from '@turf/bearing'
 import { featureCollection } from '@turf/helpers'
 import { point } from '@turf/helpers'
 
-export const asPoint = (coords, options) => {
-  return point(coords, { properties: options })
+export const asPoint = (coords, properties) => {
+  return point(coords, properties)
 }
 
 export const asFeatureCollection = (feature) => {

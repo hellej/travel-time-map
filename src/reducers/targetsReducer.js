@@ -19,13 +19,20 @@ const targetsReducer = (store = initialTargets, action) => {
             return {
                 ...store,
                 targetsFC: action.targetsFC,
+                targetLabelsFC: createLabelPoints(action.targetsFC),
             }
         default:
             return store
     }
 }
 
-export const updateTargets = () => {
+const createLabelPoints = (FC) => {
+    const features = FC.features.map(feature => {
+        return turf.asPoint(feature.properties.centreCoords, feature.properties)
+    })
+    return turf.asFeatureCollection(features)
+}
+
 export const initializeTargets = () => {
     const features = testLocations.features.map(feat => ({
         ...feat,

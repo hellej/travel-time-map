@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { initializeTargets } from '../../reducers/targetsReducer'
 
 class Targets extends React.Component {
 
@@ -13,6 +14,7 @@ class Targets extends React.Component {
     }
 
     componentDidMount() {
+        this.props.initializeTargets()
         const { map, targetsFC, labelsFC } = this.props
         map.once('load', () => {
             // Add layer
@@ -28,7 +30,7 @@ class Targets extends React.Component {
             map.addSource(this.lablesId, { type: 'geojson', data: labelsFC })
             this.labelsSource = map.getSource(this.lablesId)
             map.addLayer({
-                'id': 'targetsLabels',
+                'id': this.lablesId,
                 'type': 'symbol',
                 'source': this.lablesId,
                 'layout': {
@@ -53,7 +55,7 @@ class Targets extends React.Component {
             this.props.map.once('sourcedata', () => this.source.setData(this.props.targetsFC))
         }
         if (this.labelsSource !== undefined) {
-            this.sourlabelsSourcece.setData(this.props.labelsFC)
+            this.labelsSource.setData(this.props.labelsFC)
         } else {
             this.props.map.once('sourcedata', () => this.labelsSource.setData(this.props.labelsFC))
         }
@@ -69,6 +71,6 @@ const mapStateToProps = (state) => ({
     labelsFC: state.targets.targetLabelsFC,
 })
 
-const ConnectedTargets = connect(mapStateToProps, null)(Targets)
+const ConnectedTargets = connect(mapStateToProps, { initializeTargets })(Targets)
 
 export default ConnectedTargets

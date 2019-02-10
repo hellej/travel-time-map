@@ -2,16 +2,16 @@ import { turf } from '../utils/index'
 
 const circleRadiuses = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000]
 const initialTtZones = {
-    ttZonesFC: turf.asFeatureCollection([]),
+    zonesFC: turf.asFeatureCollection([]),
 }
 
-const userLocationReducer = (store = initialTtZones, action) => {
+const zonesReducer = (store = initialTtZones, action) => {
 
     switch (action.type) {
         case 'UPDATE_USER_LOCATION': {
             return {
                 ...store,
-                ttZonesFC: createCicles(action.coords)
+                zonesFC: createCicles(action.coords)
             }
         }
         default:
@@ -27,4 +27,4 @@ const createCicles = (coords) => {
     return turf.asFeatureCollection(circles)
 }
 
-export default userLocationReducer
+export default zonesReducer

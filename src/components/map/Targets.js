@@ -25,7 +25,7 @@ class Targets extends React.Component {
                 source: this.layerId,
                 type: 'fill',
                 paint: this.fillStyle,
-            }, 'travelTimeZones')
+            }, 'zones')
             // Add labels
             map.addSource(this.lablesId, { type: 'geojson', data: labelsFC })
             this.labelsSource = map.getSource(this.lablesId)

@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-class TravelTimeZones extends React.Component {
+class Zones extends React.Component {
 
     source
-    layerId = 'travelTimeZones'
+    layerId = 'zones'
+    labelId = 'zonesLabels'
     lineStyle = {
         'line-color': 'white',
-        'line-width': 1
+        'line-width': 1,
+        'line-opacity': 0.5,
     }
 
     componentDidMount() {
@@ -22,15 +24,15 @@ class TravelTimeZones extends React.Component {
                 paint: this.lineStyle,
             })
             map.addLayer({
-                'id': 'travelTimeZonesLabels',
+                'id': this.labelId,
                 'type': 'symbol',
                 'source': this.layerId,
                 'layout': {
                     'symbol-placement': 'line',
                     'text-font': ['Open Sans Regular'],
                     'text-field': '{zoneLabel}',
-                    'text-size': 14,
-                    'symbol-spacing': 300,
+                    'text-size': 13,
+                    'symbol-spacing': 320,
                 },
                 'paint': {
                     'text-color': 'white',
@@ -55,9 +57,9 @@ class TravelTimeZones extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    geoJSONFC: state.ttZones.ttZonesFC
+    geoJSONFC: state.zones.zonesFC
 })
 
-const ConnectedTravelTimeZones = connect(mapStateToProps, null)(TravelTimeZones)
+const ConnectedZones = connect(mapStateToProps, null)(Zones)
 
-export default ConnectedTravelTimeZones
+export default ConnectedZones

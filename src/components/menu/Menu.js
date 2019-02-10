@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { updateTtTargets } from './../reducers/targetsReducer'
+import { updateTtTargets } from '../../reducers/targetsReducer'
+import { Button } from './Button'
 
-const Button = styled.button`
-  pointer-events: auto;
+const Flex = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 `
 class Menu extends Component {
 
     render() {
         const { userLocFC, targetsFC, updateTtTargets } = this.props
         return (
-            <div>
-                <Button onClick={() => updateTtTargets(userLocFC, targetsFC)}>asdf</Button>
-            </div>
+            <Flex>
+                <Button onClick={() => updateTtTargets(userLocFC, targetsFC)}>Find Pools</Button>
+                <Button onClick={() => updateTtTargets(userLocFC, targetsFC)}>Show Travel Times</Button>
+            </Flex>
         )
     }
 }

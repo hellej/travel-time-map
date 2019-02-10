@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Map from './components/map/Map'
 import UserLocation from './components/map/UserLocation'
-import TravelTimeZones from './components/map/TravelTimeZones'
+import Zones from './components/map/Zones'
 import Targets from './components/map/Targets'
 import MapControl from './components/map/MapControl'
-import Menu from './components/Menu'
+import Menu from './components/menu/Menu'
 import styled from 'styled-components'
 
 const AbsoluteContainer = styled.div`
@@ -13,7 +13,6 @@ const AbsoluteContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  letter-spacing: 0.6px;
   pointer-events: none;
   top: 10px;
 `
@@ -33,7 +32,7 @@ class App extends Component {
         <Map>
           <MapControl />
           <UserLocation />
-          <TravelTimeZones />
+          <Zones />
           <Targets />
         </Map>
       </div>

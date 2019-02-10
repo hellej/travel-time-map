@@ -28,7 +28,9 @@ const targetsReducer = (store = initialTargets, action) => {
 
 const createLabelPoints = (FC) => {
     const features = FC.features.map(feature => {
-        return turf.asPoint(feature.properties.centreCoords, feature.properties)
+        const centreCoords = feature.properties.centreCoords
+        const offsetCoords = turf.getDestination(centreCoords, feature.properties.radius + 25, 90)
+        return turf.asPoint(offsetCoords, feature.properties)
     })
     return turf.asFeatureCollection(features)
 }

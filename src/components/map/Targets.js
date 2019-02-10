@@ -9,8 +9,8 @@ class Targets extends React.Component {
     lablesId = 'targetsLabels'
     labelsSource
     fillStyle = {
-        'fill-color': 'green',
-        'fill-opacity': 1,
+        'fill-color': '#89ffff',
+        'fill-opacity': 0.6,
     }
 
     componentDidMount() {
@@ -35,6 +35,7 @@ class Targets extends React.Component {
                 'source': this.lablesId,
                 'layout': {
                     'symbol-placement': 'point',
+                    'text-anchor': 'left',
                     'text-font': ['Open Sans Regular'],
                     'text-field': '{name}',
                     'text-size': 13,

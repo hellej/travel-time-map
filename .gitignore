@@ -28,3 +28,7 @@ yarn-error.log*
 # firebase
 /deploy.sh
 .firebase
+.firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules

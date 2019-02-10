@@ -14,7 +14,7 @@ class UserLocation extends React.Component {
     }
 
     componentDidMount() {
-        this.props.mockUserLocation()
+        // this.props.mockUserLocation()
         this.props.startTrackingUserLocation()
         const { map, geoJSONFC } = this.props
         map.once('load', () => {

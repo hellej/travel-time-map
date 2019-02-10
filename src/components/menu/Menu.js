@@ -8,6 +8,7 @@ const Flex = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
 `
 class Menu extends Component {
 
@@ -15,15 +16,15 @@ class Menu extends Component {
         const { userLocFC, targetsFC, updateTtTargets } = this.props
         return (
             <Flex>
-                <Button onClick={() => updateTtTargets(userLocFC, targetsFC)}>Find Pools</Button>
                 <Button onClick={() => updateTtTargets(userLocFC, targetsFC)}>Show Travel Times</Button>
+                {/* <Button onClick={() => updateTtTargets(userLocFC, targetsFC)}>Show Travel Times</Button> */}
             </Flex>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    targetsFC: state.targets.targetsFC,
+    targetsFC: state.targets.ttTargetsFC,
     userLocFC: state.userLocation.geoJSONFC,
 })
 

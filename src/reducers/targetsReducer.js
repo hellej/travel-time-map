@@ -3,8 +3,9 @@ import testLocations from '../testLocations.json'
 import * as dt from '../services/digiTransit'
 
 const initialTargets = {
-    targetsFC: turf.asFeatureCollection([]),
-    targetLabelsFC: turf.asFeatureCollection([]),
+    realTargetsFC: turf.asFeatureCollection([]),
+    ttTargetsFC: turf.asFeatureCollection([]),
+    ttTargetLabelsFC: turf.asFeatureCollection([]),
 }
 
 const targetsReducer = (store = initialTargets, action) => {
@@ -13,13 +14,15 @@ const targetsReducer = (store = initialTargets, action) => {
         case 'INITIALIZE_TARGETS':
             return {
                 ...store,
-                targetsFC: action.targetsFC,
+                realTargetsFC: action.targetsFC,
+                ttTargetsFC: action.targetsFC,
+                ttTargetLabelsFC: action.targetsFC,
             }
         case 'UPDATE_TT_TARGETS':
             return {
                 ...store,
-                targetsFC: action.targetsFC,
-                targetLabelsFC: createLabelPoints(action.targetsFC),
+                ttTargetsFC: action.ttTargetsFC,
+                ttTargetLabelsFC: createLabelPoints(action.ttTargetsFC),
             }
         default:
             return store
@@ -29,7 +32,7 @@ const targetsReducer = (store = initialTargets, action) => {
 const createLabelPoints = (FC) => {
     const features = FC.features.map(feature => {
         const centreCoords = feature.properties.centreCoords
-        const offsetCoords = turf.getDestination(centreCoords, feature.properties.radius + 25, 90)
+        const offsetCoords = turf.getDestination(centreCoords, feature.properties.radius, 90)
         return turf.asPoint(offsetCoords, feature.properties)
     })
     return turf.asFeatureCollection(features)
@@ -43,7 +46,7 @@ export const initializeTargets = () => {
     return { type: 'INITIALIZE_TARGETS', targetsFC: turf.asFeatureCollection(features) }
 }
 
-export const updateTtTargets = (userLocFC, targetsFC) => {
+export const updateTtTargets = (userLocFC, ttTargetsFC) => {
     return async (dispatch) => {
         if (userLocFC.features.length === 0) {
             dispatch({ type: 'NO_USER_LOCATION' })
@@ -52,7 +55,7 @@ export const updateTtTargets = (userLocFC, targetsFC) => {
         const originCoords = userLocFC.features[0].geometry.coordinates
         dispatch({ type: 'SET_ZONE_MODE_TO_TT', coords: originCoords })
 
-        targetsFC.features.reduce(async (previousPromise, feature) => {
+        ttTargetsFC.features.reduce(async (previousPromise, feature) => {
             const features = await previousPromise
             const targetCoords = feature.geometry.coordinates
             const tts = await dt.getTravelTimes(originCoords, targetCoords)
@@ -63,7 +66,7 @@ export const updateTtTargets = (userLocFC, targetsFC) => {
             const feat = turf.getCircle(destCoords, { radius, centreCoords: destCoords, ...feature.properties })
             features.push(feat)
             const FC = turf.asFeatureCollection(features)
-            dispatch({ type: 'UPDATE_TT_TARGETS', targetsFC: FC, targetLabelsFC: testLocations })
+            dispatch({ type: 'UPDATE_TT_TARGETS', ttTargetsFC: FC, ttTargetLabelsFC: testLocations })
             return features
         }, Promise.resolve([]))
     }

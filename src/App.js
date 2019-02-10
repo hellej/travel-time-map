@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import Map from './components/map/Map'
 import UserLocation from './components/map/UserLocation'
 import Zones from './components/map/Zones'
-import Targets from './components/map/Targets'
+import RealTargets from './components/map/RealTargets'
+import TtTargets from './components/map/TtTargets'
 import MapControl from './components/map/MapControl'
 import Menu from './components/menu/Menu'
 import styled from 'styled-components'
@@ -14,11 +15,11 @@ const AbsoluteContainer = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   pointer-events: none;
-  top: 10px;
 `
-const TopLeftPanel = styled(AbsoluteContainer)`
-  left: 5px;
-  right: 5px;
+const BottomPanel = styled(AbsoluteContainer)`
+  bottom: 5px;
+  left: 0px;
+  right: 0px;
 `
 
 class App extends Component {
@@ -26,14 +27,15 @@ class App extends Component {
   render() {
     return (
       <div>
-        <TopLeftPanel>
+        <BottomPanel>
           <Menu />
-        </TopLeftPanel>
+        </BottomPanel>
         <Map>
           <MapControl />
           <UserLocation />
           <Zones />
-          <Targets />
+          <RealTargets />
+          <TtTargets />
         </Map>
       </div>
     )

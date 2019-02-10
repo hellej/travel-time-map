@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "@turf/bbox": "^6.0.1",
+    "@turf/bearing": "^6.0.1",
     "@turf/buffer": "^5.1.5",
     "@turf/circle": "^6.0.1",
+    "@turf/destination": "^6.0.1",
     "@turf/helpers": "^6.1.4",
     "graphql-request": "^1.8.2",
     "mapbox-gl": "^0.53.0-beta.1",

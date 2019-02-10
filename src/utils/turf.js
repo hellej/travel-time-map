@@ -1,11 +1,13 @@
 import bbox from '@turf/bbox'
 import buffer from '@turf/buffer'
 import circle from '@turf/circle'
+import destination from '@turf/destination'
+import bearing from '@turf/bearing'
 import { featureCollection } from '@turf/helpers'
 import { point } from '@turf/helpers'
 
-export const asPoint = (coords) => {
-  return point(coords)
+export const asPoint = (coords, options) => {
+  return point(coords, { properties: options })
 }
 
 export const asFeatureCollection = (feature) => {
@@ -21,5 +23,15 @@ export const getBbox = (geojsonFeature) => {
 }
 
 export const getCircle = (center, options) => {
-  return circle(center, options.radius, { steps: 120, units: 'meters', properties: options })
+  return circle(center, options.radius, { steps: 130, units: 'meters', properties: options })
+}
+
+export const getBearing = (originCoords, destCoords) => {
+  return bearing(asPoint(originCoords), asPoint(destCoords))
+}
+
+export const getDestination = (originCoords, distance, bearing) => {
+  const point = asPoint(originCoords)
+  const dest = destination(point, distance, bearing, { units: 'meters' })
+  return dest.geometry.coordinates
 }

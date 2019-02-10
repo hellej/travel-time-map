@@ -46,7 +46,7 @@ class Zones extends React.Component {
     componentDidUpdate = () => {
         const { map, geoJSONFC, mode } = this.props
         const textColor = mode === 'distance' ? 'white' : 'white'
-        const lineColor = mode === 'distance' ? '#a2ff93' : 'white'
+        const lineColor = mode === 'distance' ? '#b0e0a8' : 'white'
         if (this.source !== undefined) {
             this.source.setData(geoJSONFC)
             map.setPaintProperty(this.labelsId, 'text-color', textColor)

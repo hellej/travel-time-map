@@ -5,13 +5,13 @@ export const Button = styled.div.attrs(props => ({
     style: ({ display: props.visible ? '' : 'none' })
 })
 )`
-  color: ${props => props.color ? props.color : 'white'}; 
+  color: ${props => props.color ? props.color : 'black'}; 
   cursor: pointer;
   padding: 6px 11px;
   border-radius: 8px;
-  background-color: #24af24;
+  background-color: white;
   margin: 5px 0px;
-  font-weight: 400;
+  font-weight: 450;
   font-size: 18px;
   width: max-content;
   max-width: 90%;

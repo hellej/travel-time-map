@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { startTrackingUserLocation } from './../../reducers/userLocationReducer'
+import { startTrackingUserLocation, mockUserLocation } from './../../reducers/userLocationReducer'
 
 class UserLocation extends React.Component {
 
@@ -14,6 +14,7 @@ class UserLocation extends React.Component {
     }
 
     componentDidMount() {
+        this.props.mockUserLocation()
         this.props.startTrackingUserLocation()
         const { map, geoJSONFC } = this.props
         map.once('load', () => {
@@ -39,11 +40,10 @@ class UserLocation extends React.Component {
 const mapStateToProps = (state) => ({
     geoJSONFC: state.userLocation.geoJSONFC
 })
-
 const mapDispatchToProps = {
-    startTrackingUserLocation
+    startTrackingUserLocation,
+    mockUserLocation,
 }
-
 const ConnectedUserLocation = connect(mapStateToProps, mapDispatchToProps)(UserLocation)
 
 export default ConnectedUserLocation

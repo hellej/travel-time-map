@@ -3,7 +3,7 @@ import { turf } from '../utils/index'
 const geoOptions = {
   enableHighAccuracy: true,
   maximumAge: 30000,
-  timeout: 27000
+  timeout: 27000,
 }
 const initialUserLocation = {
   expireTime: '',
@@ -30,6 +30,17 @@ const userLocationReducer = (store = initialUserLocation, action) => {
 
     default:
       return store
+  }
+}
+
+export const mockUserLocation = () => {
+  const lng = 24.93312835
+  const lat = 60.16910312
+  const geoJSONFC = turf.asFeatureCollection([turf.asPoint([lng, lat])])
+  return {
+    type: 'UPDATE_USER_LOCATION',
+    coords: [lng, lat],
+    geoJSONFC,
   }
 }
 

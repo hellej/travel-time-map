@@ -22,6 +22,13 @@ const zonesReducer = (store = initialTtZones, action) => {
                 zonesFC: createCirclesFC(action.coords, 'duration'),
             }
         }
+        case 'TOGGLE_DISTANCE_ZONES': {
+            return {
+                ...store,
+                mode: 'distance',
+                zonesFC: createCirclesFC(action.coords, 'duration'),
+            }
+        }
         default:
             return store
     }
@@ -38,5 +45,11 @@ const createCirclesFC = (coords, mode) => {
     }, [])
     return turf.asFeatureCollection(circles)
 }
+
+export const toggleDistanceZones = (userLocFC) => {
+    const originCoords = userLocFC.features[0].geometry.coordinates
+    return { type: 'TOGGLE_DISTANCE_ZONES', coords: originCoords }
+}
+
 
 export default zonesReducer

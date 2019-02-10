@@ -24,9 +24,23 @@ const targetsReducer = (store = initialTargets, action) => {
                 ttTargetsFC: action.ttTargetsFC,
                 ttTargetLabelsFC: createLabelPoints(action.ttTargetsFC),
             }
+        case 'UPDATE_USER_LOCATION': {
+            return {
+                ...store,
+                realTargetsFC: updateDistancesToTargets(action.coords, store.realTargetsFC),
+            }
+        }
         default:
             return store
     }
+}
+
+const updateDistancesToTargets = (userCoords, realTargetsFC) => {
+    const features = realTargetsFC.features.map(feature => {
+        const distance = turf.getDistance(userCoords, feature.geometry.coordinates)
+        return { ...feature, properties: { ...feature.properties, distance } }
+    })
+    return turf.asFeatureCollection(features)
 }
 
 const createLabelPoints = (FC) => {

@@ -34,16 +34,18 @@ const userLocationReducer = (store = initialUserLocation, action) => {
 }
 
 export const mockUserLocation = () => {
-  const lng = 24.93312835
-  const lat = 60.16910312
-  const geoJSONFC = turf.asFeatureCollection([turf.asPoint([lng, lat])])
-  return {
-    type: 'UPDATE_USER_LOCATION',
-    coords: [lng, lat],
-    geoJSONFC,
+  return async (dispatch) => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    const lng = 24.93312835
+    const lat = 60.16910312
+    const geoJSONFC = turf.asFeatureCollection([turf.asPoint([lng, lat])])
+    dispatch({
+      type: 'UPDATE_USER_LOCATION',
+      coords: [lng, lat],
+      geoJSONFC,
+    })
   }
 }
-
 export const startTrackingUserLocation = () => {
   return (dispatch) => {
     dispatch({ type: 'START_TRACKING_USER_LOCATION' })

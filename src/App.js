@@ -17,7 +17,7 @@ const AbsoluteContainer = styled.div`
   pointer-events: none;
 `
 const BottomPanel = styled(AbsoluteContainer)`
-  bottom: 5px;
+  bottom: 10px;
   left: 0px;
   right: 0px;
 `

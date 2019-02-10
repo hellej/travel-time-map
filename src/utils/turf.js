@@ -2,6 +2,7 @@ import bbox from '@turf/bbox'
 import buffer from '@turf/buffer'
 import circle from '@turf/circle'
 import destination from '@turf/destination'
+import distance from '@turf/distance'
 import bearing from '@turf/bearing'
 import { featureCollection } from '@turf/helpers'
 import { point } from '@turf/helpers'
@@ -28,6 +29,11 @@ export const getCircle = (center, options) => {
 
 export const getBearing = (originCoords, destCoords) => {
   return bearing(asPoint(originCoords), asPoint(destCoords))
+}
+
+export const getDistance = (originCoords, destCoords) => {
+  const dist = distance(asPoint(originCoords), asPoint(destCoords), { units: 'meters' })
+  return Math.round(dist)
 }
 
 export const getDestination = (originCoords, distance, bearing) => {

@@ -19,6 +19,7 @@ const getTravelTimesQuery = (originCoords, targetCoords) => {
 }
 
 export const getTravelTimes = async (originCoords, targetCoords) => {
+    console.log('coodrs to DT:', originCoords, targetCoords)
     const data = await client.request(getTravelTimesQuery(originCoords, targetCoords))
     const durationss = data.plan.itineraries.map(itin => itin.duration)
     const means = durationss.reduce((acc, value) => acc += value, 0) / durationss.length

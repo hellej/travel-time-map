@@ -23,7 +23,7 @@ export const getBbox = (geojsonFeature) => {
 }
 
 export const getCircle = (center, options) => {
-  return circle(center, options.radius, { steps: 130, units: 'meters', properties: options })
+  return circle(center, options.radius, { steps: 100, units: 'meters', properties: options })
 }
 
 export const getBearing = (originCoords, destCoords) => {

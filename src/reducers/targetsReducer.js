@@ -15,7 +15,7 @@ const targetsReducer = (store = initialTargets, action) => {
                 ...store,
                 targetsFC: action.targetsFC,
             }
-        case 'UPDATE_TARGETS':
+        case 'UPDATE_TT_TARGETS':
             return {
                 ...store,
                 targetsFC: action.targetsFC,
@@ -50,23 +50,21 @@ export const updateTtTargets = (userLocFC, targetsFC) => {
             return
         }
         const originCoords = userLocFC.features[0].geometry.coordinates
+        dispatch({ type: 'SET_ZONE_MODE_TO_TT', coords: originCoords })
+
         targetsFC.features.reduce(async (previousPromise, feature) => {
-            const acc = await previousPromise
+            const features = await previousPromise
             const targetCoords = feature.geometry.coordinates
             const tts = await dt.getTravelTimes(originCoords, targetCoords)
             const bearing = turf.getBearing(originCoords, targetCoords)
             const destCoords = turf.getDestination(originCoords, tts.mean * 100, bearing)
             const radius = tts.range > 1 ? (tts.range * 100) / 2 : 40
             console.log('tts', tts)
-            console.log('bearing', bearing)
-            console.log('destCoords', destCoords)
-            console.log('radius', radius)
             const feat = turf.getCircle(destCoords, { radius, centreCoords: destCoords, ...feature.properties })
-            acc.push(feat)
-            const FC = turf.asFeatureCollection(acc)
-            console.log('fc', FC)
-            dispatch({ type: 'UPDATE_TARGETS', targetsFC: FC, targetLabelsFC: testLocations })
-            return acc
+            features.push(feat)
+            const FC = turf.asFeatureCollection(features)
+            dispatch({ type: 'UPDATE_TT_TARGETS', targetsFC: FC, targetLabelsFC: testLocations })
+            return features
         }, Promise.resolve([]))
     }
 }

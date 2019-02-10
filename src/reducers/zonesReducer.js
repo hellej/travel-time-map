@@ -26,7 +26,7 @@ const zonesReducer = (store = initialTtZones, action) => {
             return {
                 ...store,
                 mode: 'distance',
-                zonesFC: createCirclesFC(action.coords, 'duration'),
+                zonesFC: createCirclesFC(action.coords, 'distance'),
             }
         }
         default:

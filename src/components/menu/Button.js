@@ -12,7 +12,7 @@ export const Button = styled.div.attrs(props => ({
   background-color: white;
   margin: 5px 0px;
   font-weight: 450;
-  font-size: 18px;
+  font-size: 24px;
   width: max-content;
   max-width: 90%;
   overflow: auto;
@@ -21,7 +21,8 @@ export const Button = styled.div.attrs(props => ({
   transition-duration: 0.1s;
   -webkit-transition-duration: 0.1s; /* Safari */
   &:hover {
-    margin-left: 2px;
+    background-color: #ffffff80;
+    color: white;
   }
   @media (max-width: 500px) {
     font-size: 15px;

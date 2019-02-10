@@ -8,27 +8,28 @@ class RealTargets extends React.Component {
     layerId = 'realTargets'
     labelsId = 'realTargetsLabels'
 
-    labelLayout = {
-        'symbol-placement': 'point',
-        'text-allow-overlap': true,
-        'text-ignore-placement': true,
-        'text-anchor': 'left',
-        'text-offset': [1, 0],
-        'text-font': ['Open Sans Regular'],
-        'text-field': '{name}',
-        'text-size': 13,
-    }
     circlePaint = {
         'circle-color': 'transparent',
         'circle-opacity': 0.5,
-        'circle-radius': 7,
+        'circle-radius': 6,
         'circle-stroke-width': 2,
         'circle-stroke-color': '#ff99f4',
     }
     labelPaint = {
         'text-color': 'white',
         'text-halo-color': 'black',
-        'text-halo-width': 3
+        'text-halo-blur': 3,
+        'text-halo-width': 2
+    }
+    labelLayout = {
+        'symbol-placement': 'point',
+        'text-anchor': 'left',
+        'text-offset': [0.8, 0],
+        'text-allow-overlap': true,
+        'text-ignore-placement': true,
+        'text-field': '{name}',
+        'text-font': ['Open Sans Regular'],
+        'text-size': 13,
     }
 
     componentDidMount() {

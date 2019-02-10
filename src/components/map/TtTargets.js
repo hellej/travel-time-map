@@ -15,17 +15,17 @@ class TtTargets extends React.Component {
     labelPaint = {
         'text-color': 'white',
         'text-halo-color': 'black',
-        'text-halo-width': 3
+        'text-halo-blur': 3,
+        'text-halo-width': 2
     }
     labelLayout = {
         'symbol-placement': 'point',
-        'icon-allow-overlap': true,
         'text-anchor': 'left',
+        'text-offset': [0.2, 0],
         'text-allow-overlap': true,
         'text-ignore-placement': true,
-        'text-font': ['Open Sans Regular'],
         'text-field': '{name}',
-        'text-offset': [0.2, 0],
+        'text-font': ['Open Sans Regular'],
         'text-size': 14,
     }
 

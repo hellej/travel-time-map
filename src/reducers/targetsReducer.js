@@ -77,7 +77,7 @@ export const updateTtTargets = (userLocFC, realTargetsFC) => {
             const tts = await dt.getTravelTimes(originCoords, targetCoords)
             const bearing = turf.getBearing(originCoords, targetCoords)
             const destCoords = turf.getDestination(originCoords, tts.mean * 100, bearing)
-            const radius = tts.range > 1 ? (tts.range * 100) / 2 : 40
+            const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
             console.log('tts', tts)
             const feat = turf.getCircle(destCoords, { radius, centreCoords: destCoords, ...feature.properties })
             features.push(feat)

@@ -5,7 +5,7 @@ class Zones extends React.Component {
 
     source
     layerId = 'zones'
-    labelId = 'zonesLabels'
+    labelsId = 'zonesLabels'
     lineStyle = {
         'line-color': 'white',
         'line-width': 1,
@@ -24,7 +24,7 @@ class Zones extends React.Component {
                 paint: this.lineStyle,
             })
             map.addLayer({
-                'id': this.labelId,
+                'id': this.labelsId,
                 'type': 'symbol',
                 'source': this.layerId,
                 'layout': {
@@ -44,10 +44,16 @@ class Zones extends React.Component {
     }
 
     componentDidUpdate = () => {
+        const { map, geoJSONFC, mode } = this.props
+        const textColor = mode === 'distance' ? 'white' : '#d8fffc'
         if (this.source !== undefined) {
-            this.source.setData(this.props.geoJSONFC)
+            this.source.setData(geoJSONFC)
+            map.setPaintProperty(this.labelsId, 'text-color', textColor)
         } else {
-            this.props.map.once('sourcedata', () => this.source.setData(this.props.geoJSONFC))
+            this.props.map.once('sourcedata', () => {
+                this.source.setData(this.props.geoJSONFC)
+                map.setPaintProperty(this.labelsId, 'text-color', textColor)
+            })
         }
     }
 
@@ -57,7 +63,8 @@ class Zones extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    geoJSONFC: state.zones.zonesFC
+    geoJSONFC: state.zones.zonesFC,
+    mode: state.zones.mode,
 })
 
 const ConnectedZones = connect(mapStateToProps, null)(Zones)

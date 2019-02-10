@@ -8,8 +8,8 @@ class Zones extends React.Component {
     labelsId = 'zonesLabels'
     lineStyle = {
         'line-color': 'white',
-        'line-width': 1,
-        'line-opacity': 0.5,
+        'line-width': 2,
+        'line-opacity': 0.3,
     }
 
     componentDidMount() {
@@ -45,14 +45,17 @@ class Zones extends React.Component {
 
     componentDidUpdate = () => {
         const { map, geoJSONFC, mode } = this.props
-        const textColor = mode === 'distance' ? 'white' : '#d8fffc'
+        const textColor = mode === 'distance' ? 'white' : 'white'
+        const lineColor = mode === 'distance' ? '#a2ff93' : 'white'
         if (this.source !== undefined) {
             this.source.setData(geoJSONFC)
             map.setPaintProperty(this.labelsId, 'text-color', textColor)
+            map.setPaintProperty(this.layerId, 'line-color', lineColor)
         } else {
             this.props.map.once('sourcedata', () => {
                 this.source.setData(this.props.geoJSONFC)
                 map.setPaintProperty(this.labelsId, 'text-color', textColor)
+                map.setPaintProperty(this.layerId, 'line-color', lineColor)
             })
         }
     }

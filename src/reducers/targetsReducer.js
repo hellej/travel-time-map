@@ -16,7 +16,6 @@ const targetsReducer = (store = initialTargets, action) => {
                 ...store,
                 realTargetsFC: action.targetsFC,
                 ttTargetsFC: action.targetsFC,
-                ttTargetLabelsFC: action.targetsFC,
             }
         case 'UPDATE_TT_TARGETS':
             return {
@@ -60,7 +59,7 @@ export const initializeTargets = () => {
     return { type: 'INITIALIZE_TARGETS', targetsFC: turf.asFeatureCollection(features) }
 }
 
-export const updateTtTargets = (userLocFC, ttTargetsFC) => {
+export const updateTtTargets = (userLocFC, realTargetsFC) => {
     return async (dispatch) => {
         if (userLocFC.features.length === 0) {
             dispatch({ type: 'NO_USER_LOCATION' })
@@ -69,7 +68,10 @@ export const updateTtTargets = (userLocFC, ttTargetsFC) => {
         const originCoords = userLocFC.features[0].geometry.coordinates
         dispatch({ type: 'SET_ZONE_MODE_TO_TT', coords: originCoords })
 
-        ttTargetsFC.features.reduce(async (previousPromise, feature) => {
+        const features = realTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
+        console.log('features', features.slice(0, 8))
+
+        features.slice(0, 3).reduce(async (previousPromise, feature) => {
             const features = await previousPromise
             const targetCoords = feature.geometry.coordinates
             const tts = await dt.getTravelTimes(originCoords, targetCoords)

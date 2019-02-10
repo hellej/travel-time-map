@@ -13,19 +13,22 @@ const Flex = styled.div`
 class Menu extends Component {
 
     render() {
-        const { userLocFC, targetsFC, updateTtTargets } = this.props
+        const { userLocFC, realTargetsFC, updateTtTargets, zones } = this.props
         return (
             <Flex>
-                <Button onClick={() => updateTtTargets(userLocFC, targetsFC)}>Show Travel Times</Button>
-                {/* <Button onClick={() => updateTtTargets(userLocFC, targetsFC)}>Show Travel Times</Button> */}
+                {(zones.mode === 'distance')
+                    ? <Button onClick={() => updateTtTargets(userLocFC, realTargetsFC)}>Show Travel Times</Button>
+                    : <Button onClick={() => updateTtTargets(userLocFC, realTargetsFC)}>Show Distances</Button>
+                }
             </Flex>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    targetsFC: state.targets.ttTargetsFC,
+    realTargetsFC: state.targets.realTargetsFC,
     userLocFC: state.userLocation.geoJSONFC,
+    zones: state.zones,
 })
 
 const ConnectedMenu = connect(mapStateToProps, { updateTtTargets })(Menu)

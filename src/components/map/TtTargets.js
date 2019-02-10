@@ -9,8 +9,8 @@ class TtTargets extends React.Component {
     labelsSource
 
     paint = {
-        'fill-color': '#89ffff',
-        'fill-opacity': 0.6,
+        'fill-color': '#ff99f4',
+        'fill-opacity': 0.8,
     }
     labelPaint = {
         'text-color': 'white',
@@ -23,7 +23,7 @@ class TtTargets extends React.Component {
         'text-anchor': 'left',
         'text-font': ['Open Sans Regular'],
         'text-field': '{name}',
-        'text-offset': [0.5, 0],
+        'text-offset': [0.2, 0],
         'text-size': 13,
     }
 

@@ -17,6 +17,13 @@ class RealTargets extends React.Component {
         'text-field': '{name}',
         'text-size': 13,
     }
+    circlePaint = {
+        'circle-color': 'white',
+        'circle-opacity': 0.5,
+        'circle-radius': 9,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': 'white',
+    }
     labelPaint = {
         'text-color': 'white',
         'text-halo-color': 'black',
@@ -34,13 +41,7 @@ class RealTargets extends React.Component {
                 id: this.layerId,
                 source: this.layerId,
                 type: 'circle',
-                paint: {
-                    'circle-color': '#ff0000',
-                    'circle-opacity': 0.2,
-                    'circle-radius': 10,
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': 'white',
-                },
+                paint: this.circlePaint,
             }, 'zones')
             // Add labels
             map.addLayer({

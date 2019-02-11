@@ -21,8 +21,8 @@ export const Button = styled.div.attrs(props => ({
   transition-duration: 0.1s;
   -webkit-transition-duration: 0.1s; /* Safari */
   &:hover {
-    background-color: #ffffff80;
-    color: white;
+    background-color: #ebffcd;
+    color: black;
   }
   @media (max-width: 500px) {
     font-size: 15px;

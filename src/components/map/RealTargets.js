@@ -26,7 +26,7 @@ class RealTargets extends React.Component {
         'text-anchor': 'left',
         'text-offset': [0.8, 0],
         'text-allow-overlap': true,
-        'text-ignore-placement': true,
+        'text-ignore-placement': false,
         'text-field': '{name}',
         'text-font': ['Open Sans Regular'],
         'text-size': 13,

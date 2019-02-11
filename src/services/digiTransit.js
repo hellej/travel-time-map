@@ -18,12 +18,21 @@ const getTravelTimesQuery = (originCoords, targetCoords) => {
         }`
 }
 
+const asMins = (secs) => Math.round(secs / 60)
+
 export const getTravelTimes = async (originCoords, targetCoords) => {
-    console.log('coodrs to DT:', originCoords, targetCoords)
     const data = await client.request(getTravelTimesQuery(originCoords, targetCoords))
-    const durationss = data.plan.itineraries.map(itin => itin.duration)
-    const means = durationss.reduce((acc, value) => acc += value, 0) / durationss.length
-    const durations = durationss.map(duration => Math.round(duration / 60))
-    const minmax = { ttmin: Math.min(...durations), ttmax: Math.max(...durations) }
-    return { ...minmax, mean: Math.round(means / 60), range: minmax.ttmax - minmax.ttmin }
+    const durations = data.plan.itineraries.map(itin => itin.duration)
+    const min = Math.min(...durations)
+    const max = Math.max(...durations)
+    const range = max - min
+    const mean = durations.reduce((acc, value) => acc += value, 0) / durations.length
+    const median = min + range / 2
+    return {
+        min: asMins(min),
+        max: asMins(max),
+        mean: asMins(mean),
+        median: asMins(median),
+        range: asMins(range)
+    }
 }

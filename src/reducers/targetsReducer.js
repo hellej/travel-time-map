@@ -75,14 +75,13 @@ export const updateTtTargets = (userLocFC, realTargetsFC) => {
             const features = await previousPromise
             const targetCoords = feature.geometry.coordinates
             const tts = await dt.getTravelTimes(originCoords, targetCoords)
-            const bearing = turf.getBearing(originCoords, targetCoords)
-            const destCoords = turf.getDestination(originCoords, tts.mean * 100, bearing)
-            const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
             console.log('tts', tts)
+            const bearing = turf.getBearing(originCoords, targetCoords)
+            const destCoords = turf.getDestination(originCoords, tts.median * 100, bearing)
+            const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
             const feat = turf.getCircle(destCoords, { radius, centreCoords: destCoords, ...feature.properties })
             features.push(feat)
-            const FC = turf.asFeatureCollection(features)
-            dispatch({ type: 'UPDATE_TT_TARGETS', ttTargetsFC: FC, ttTargetLabelsFC: testLocations })
+            dispatch({ type: 'UPDATE_TT_TARGETS', ttTargetsFC: turf.asFeatureCollection(features) })
             return features
         }, Promise.resolve([]))
     }

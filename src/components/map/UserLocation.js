@@ -9,7 +9,7 @@ class UserLocation extends React.Component {
     circleStyle = {
         'circle-color': '#00c7ff',
         'circle-stroke-color': '#00c7ff',
-        'circle-radius': 5,
+        'circle-radius': 4,
         'circle-stroke-width': 1
     }
 

@@ -1,7 +1,7 @@
 import { GraphQLClient } from 'graphql-request'
 
 const endpoint = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql'
-const headers = { 'Content-Type': 'application/json' }
+const headers = { 'Content-Type': 'application/json', mode: 'no-cors' }
 const client = new GraphQLClient(endpoint, { headers })
 
 const getTravelTimesQuery = (originCoords, targetCoords) => {

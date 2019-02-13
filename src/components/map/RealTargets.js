@@ -11,9 +11,9 @@ class RealTargets extends React.Component {
     circlePaint = {
         'circle-color': 'transparent',
         'circle-opacity': 0.5,
-        'circle-radius': 6,
+        'circle-radius': 5,
         'circle-stroke-width': 2,
-        'circle-stroke-color': '#ff99f4',
+        'circle-stroke-color': '#b7ff84',
     }
     labelPaint = {
         'text-color': 'white',
@@ -68,6 +68,7 @@ class RealTargets extends React.Component {
             map.once('sourcedata', () => {
                 this.source.setData(realTargetsFC)
                 map.setLayoutProperty(this.layerId, 'visibility', visibility)
+                map.setLayoutProperty(this.labelsId, 'visibility', visibility)
             })
         }
     }

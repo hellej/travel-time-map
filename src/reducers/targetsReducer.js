@@ -71,7 +71,7 @@ export const updateTtTargets = (userLocFC, realTargetsFC) => {
         const features = realTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
         console.log('features', features.slice(0, 8))
 
-        features.slice(0, 8).reduce(async (previousPromise, feature) => {
+        features.slice(0, 10).reduce(async (previousPromise, feature) => {
             const features = await previousPromise
             const targetCoords = feature.geometry.coordinates
             const tts = await dt.getTravelTimes(originCoords, targetCoords)

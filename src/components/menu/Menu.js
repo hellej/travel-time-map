@@ -5,23 +5,31 @@ import { updateTtTargets } from '../../reducers/targetsReducer'
 import { toggleDistanceZones } from '../../reducers/zonesReducer'
 import { Button } from './Button'
 
+const OuterFlex = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+`
 const Flex = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    width: 200px;
+    justify-content: space-evenly;
+    pointer-events: auto;
 `
+
 class Menu extends Component {
 
     render() {
         const { userLocFC, realTargetsFC, zones, updateTtTargets, toggleDistanceZones } = this.props
         return (
-            <Flex>
-                {(zones.mode === 'distance')
-                    ? <Button onClick={() => updateTtTargets(userLocFC, realTargetsFC)}>Show Travel Times</Button>
-                    : <Button onClick={() => toggleDistanceZones(userLocFC, realTargetsFC)}>Show Distances</Button>
-                }
-            </Flex>
+            <OuterFlex>
+                <Flex>
+                    <Button active={zones.mode === 'distance'} onClick={() => toggleDistanceZones(userLocFC, realTargetsFC)}>KM</Button>
+                    <Button active={zones.mode === 'duration'} onClick={() => updateTtTargets(userLocFC, realTargetsFC)}>MIN</Button>
+                </Flex>
+            </OuterFlex>
         )
     }
 }

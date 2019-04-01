@@ -1,18 +1,17 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { bool } from 'prop-types'
 
 export const Button = styled.div.attrs(props => ({
-    style: ({ display: props.visible ? '' : 'none' })
+  style: ({ display: props.visible ? '' : 'none', })
 })
 )`
-  color: ${props => props.color ? props.color : 'white'}; 
   cursor: pointer;
   padding: 6px 13px;
+  border: 1px solid;
   border-radius: 8px;
-  background-color: #019600;
   margin: 5px 0px;
-  font-weight: 400;
-  font-size: 22px;
+  font-weight: 300;
+  font-size: 28px;
   width: max-content;
   letter-spacing: 1px;
   max-width: 90%;
@@ -21,20 +20,25 @@ export const Button = styled.div.attrs(props => ({
   pointer-events: auto;
   transition-duration: 0.2s;
   -webkit-transition-duration: 0.2s; /* Safari */
-  &:hover {
-    background-color: #017b00;
+  ${props => props.active === true && css`
+    color: #1fff1f;
+    border-color: #1fff1f;
+    pointer-events: none;
+  `}
+  ${props => props.active === false && css`
     color: white;
-  }
-  @media (max-width: 500px) {
-    font-size: 20px;
-    padding: 6px 11px;
-  }
+    border-color: white;
+    &:hover { 
+      color: #1fff1f;
+      border-color: #1fff1f;
+    }
+  `}
 `
 
 Button.propTypes = {
-    visible: bool
+  visible: bool
 }
 
 Button.defaultProps = {
-    visible: true
+  visible: true
 }

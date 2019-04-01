@@ -10,11 +10,8 @@ import styled from 'styled-components'
 
 const AbsoluteContainer = styled.div`
   position: absolute;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
   pointer-events: none;
+  z-index: 2;
 `
 const BottomPanel = styled(AbsoluteContainer)`
   bottom: 17px;

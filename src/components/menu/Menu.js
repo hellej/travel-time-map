@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { updateMinTargets } from '../../reducers/targetsReducer'
-import { toggleDistanceZones } from '../../reducers/zonesReducer'
+import { updateMinTargets, updateKmTargets } from '../../reducers/targetsReducer'
 import { Button } from './Button'
 import { IconDiv, Bird, Bus, Bike, Walk, Car } from './StyledIcons'
 
@@ -33,7 +32,8 @@ const Flex = styled.div`
 class Menu extends Component {
 
     render() {
-        const { userLocFC, kmTargetsFC, zones, updateMinTargets, toggleDistanceZones } = this.props
+        const { userLocFC, kmTargetsFC, zones, updateMinTargets, updateKmTargets } = this.props
+        const transMode = zones.transMode
         if (userLocFC.features.length === 0) {
             return (
                 <LocationMissingMessage>
@@ -44,15 +44,15 @@ class Menu extends Component {
         return (
             <OuterFlex>
                 <Flex>
-                    <Button active={zones.mode === 'distance'} onClick={() => toggleDistanceZones(userLocFC, kmTargetsFC)}>KM</Button>
-                    <Button active={zones.mode === 'duration'} onClick={() => updateMinTargets(userLocFC, kmTargetsFC)}>MIN</Button>
+                    <Button active={zones.mode === 'distance'} onClick={() => updateKmTargets(userLocFC, kmTargetsFC)}>KM</Button>
+                    <Button active={zones.mode === 'duration'} onClick={() => updateMinTargets(userLocFC, kmTargetsFC, zones.transMode)}>MIN</Button>
                 </Flex>
                 <Flex>
-                    <IconDiv active={true}> <Bird /> </IconDiv>
-                    <IconDiv active={false}> <Walk /> </IconDiv>
-                    <IconDiv active={false}> <Bike /> </IconDiv>
-                    <IconDiv active={false}> <Bus /> </IconDiv>
-                    <IconDiv active={false}> <Car /> </IconDiv>
+                    <IconDiv active={transMode === 'BIRD'}> <Bird /> </IconDiv>
+                    <IconDiv active={transMode === 'WALK'}> <Walk /> </IconDiv>
+                    <IconDiv active={transMode === 'BICYCLE'}> <Bike /> </IconDiv>
+                    <IconDiv active={transMode === 'PT'}> <Bus /> </IconDiv>
+                    <IconDiv active={transMode === 'CAR'}> <Car /> </IconDiv>
                 </Flex>
             </OuterFlex>
         )
@@ -64,6 +64,6 @@ const mapStateToProps = (state) => ({
     userLocFC: state.userLocation.geoJSONFC,
     zones: state.zones,
 })
-const ConnectedMenu = connect(mapStateToProps, { updateMinTargets, toggleDistanceZones })(Menu)
+const ConnectedMenu = connect(mapStateToProps, { updateMinTargets, updateKmTargets })(Menu)
 
 export default ConnectedMenu

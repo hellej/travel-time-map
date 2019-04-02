@@ -3,6 +3,7 @@ import { turf } from '../utils/index'
 const circleRadiuses = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
 const initialTtZones = {
     mode: 'distance',
+    transMode: 'BIRD',
     zonesFC: turf.asFeatureCollection([]),
 }
 
@@ -15,7 +16,13 @@ const zonesReducer = (store = initialTtZones, action) => {
                 zonesFC: createCirclesFC(action.coords, store.mode),
             }
         }
-        case 'SET_ZONE_MODE_TO_TT': {
+        case 'SET_TRANS_MODE': {
+            return {
+                ...store,
+                transMode: action.mode,
+            }
+        }
+        case 'SET_ZONE_MODE_TO_MIN': {
             return {
                 ...store,
                 mode: 'duration',
@@ -45,11 +52,5 @@ const createCirclesFC = (coords, mode) => {
     }, [])
     return turf.asFeatureCollection(circles)
 }
-
-export const toggleDistanceZones = (userLocFC) => {
-    const originCoords = userLocFC.features[0].geometry.coordinates
-    return { type: 'TOGGLE_DISTANCE_ZONES', coords: originCoords }
-}
-
 
 export default zonesReducer

@@ -17,6 +17,11 @@ const targetsReducer = (store = initialTargets, action) => {
                 kmTargetsFC: action.targetsFC,
                 minTargetsFC: action.targetsFC,
             }
+        case 'UPDATE_KM_TARGETS':
+            return {
+                ...store,
+                kmTargetsFC: action.targetsFC,
+            }
         case 'UPDATE_MIN_TARGETS':
             return {
                 ...store,
@@ -59,14 +64,23 @@ export const initializeTargets = () => {
     return { type: 'INITIALIZE_TARGETS', targetsFC: turf.asFeatureCollection(features) }
 }
 
-export const updateMinTargets = (userLocFC, kmTargetsFC) => {
+export const updateKmTargets = (userLocFC) => {
+    const originCoords = userLocFC.features[0].geometry.coordinates
+    return { type: 'TOGGLE_DISTANCE_ZONES', coords: originCoords }
+}
+
+export const updateMinTargets = (userLocFC, kmTargetsFC, mode) => {
     return async (dispatch) => {
         if (userLocFC.features.length === 0) {
             dispatch({ type: 'NO_USER_LOCATION' })
             return
         }
+        if (mode === 'BIRD') {
+            mode = 'BICYCLE'
+        }
         const originCoords = userLocFC.features[0].geometry.coordinates
-        dispatch({ type: 'SET_ZONE_MODE_TO_TT', coords: originCoords })
+        dispatch({ type: 'SET_ZONE_MODE_TO_MIN', coords: originCoords })
+        dispatch({ type: 'SET_TRANS_MODE', mode: mode })
 
         const features = kmTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
         console.log('features', features.slice(0, 8))
@@ -74,12 +88,12 @@ export const updateMinTargets = (userLocFC, kmTargetsFC) => {
         features.slice(0, 10).reduce(async (previousPromise, feature) => {
             const features = await previousPromise
             const targetCoords = feature.geometry.coordinates
-            const tts = await dt.getTravelTimes(originCoords, targetCoords)
+            const tts = await dt.getTravelTimes(originCoords, targetCoords, mode)
             console.log('tts', tts)
             const bearing = turf.getBearing(originCoords, targetCoords)
             const destCoords = turf.getDestination(originCoords, tts.median * 100, bearing)
             const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
-            const feat = turf.getCircle(destCoords, { radius, centreCoords: destCoords, ...feature.properties })
+            const feat = turf.getCircle(destCoords, { radius, transMode: mode, centreCoords: destCoords, ...feature.properties })
             features.push(feat)
             dispatch({ type: 'UPDATE_MIN_TARGETS', minTargetsFC: turf.asFeatureCollection(features) })
             return features

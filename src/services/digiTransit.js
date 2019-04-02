@@ -4,7 +4,7 @@ const endpoint = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphq
 const headers = { 'Content-Type': 'application/json', mode: 'no-cors' }
 const client = new GraphQLClient(endpoint, { headers })
 
-const getTravelTimesQuery = (originCoords, targetCoords) => {
+const getItineraryQuery = (originCoords, targetCoords) => {
     return `{
         plan(
             from: {lat: ${originCoords[1]}, lon: ${originCoords[0]}}
@@ -18,10 +18,30 @@ const getTravelTimesQuery = (originCoords, targetCoords) => {
         }`
 }
 
+const getModeItineraryQuery = (originCoords, targetCoords, mode) => {
+    return `{
+        plan(
+            from: {lat: ${originCoords[1]}, lon: ${originCoords[0]}}
+            to: {lat: ${targetCoords[1]}, lon: ${targetCoords[0]}}
+            numItineraries: 3
+            transportModes: { mode: ${mode} }
+            ) {
+                itineraries {
+                    duration
+                }
+            }
+        }`
+}
+
 const asMins = (secs) => Math.round(secs / 60)
 
-export const getTravelTimes = async (originCoords, targetCoords) => {
-    const data = await client.request(getTravelTimesQuery(originCoords, targetCoords))
+export const getTravelTimes = async (originCoords, targetCoords, mode) => {
+    let data
+    if (mode === 'PT') {
+        data = await client.request(getItineraryQuery(originCoords, targetCoords))
+    } else {
+        data = await client.request(getModeItineraryQuery(originCoords, targetCoords, mode))
+    }
     const durations = data.plan.itineraries.map(itin => itin.duration)
     const min = Math.min(...durations)
     const max = Math.max(...durations)

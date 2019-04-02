@@ -18,11 +18,27 @@ const Flex = styled.div`
     justify-content: space-evenly;
     pointer-events: auto;
 `
+const LocationMissingMessage = styled.div`
+    color: white;
+    margin: auto;
+    text-align: center;
+    font-size: 31px;
+    letter-spacing: 1px;
+    font-weight: 300;
+    height: 50vh;
+`
 
 class Menu extends Component {
 
     render() {
         const { userLocFC, realTargetsFC, zones, updateTtTargets, toggleDistanceZones } = this.props
+        if (userLocFC.features.length === 0) {
+            return (
+                <LocationMissingMessage>
+                    Waiting for location...
+                </LocationMissingMessage>
+            )
+        }
         return (
             <OuterFlex>
                 <Flex>

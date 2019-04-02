@@ -21,16 +21,16 @@ export const Button = styled.div.attrs(props => ({
   transition-duration: 0.2s;
   -webkit-transition-duration: 0.2s; /* Safari */
   ${props => props.active === true && css`
-    color: #1fff1f;
-    border-color: #1fff1f;
+    color: #46ff66;
+    border-color: #46ff66;
     pointer-events: none;
   `}
   ${props => props.active === false && css`
     color: white;
     border-color: white;
     &:hover { 
-      color: #1fff1f;
-      border-color: #1fff1f;
+      color: #46ff66;
+      border-color: #46ff66;
     }
   `}
 `

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { updateMinTargets, updateKmTargets } from '../../reducers/targetsReducer'
+import { updateMinTargets, updateKmTargets, setTransMode } from '../../reducers/targetsReducer'
 import { Button } from './Button'
 import { IconDiv, Bird, Bus, Bike, Walk, Car } from './StyledIcons'
 
@@ -32,8 +32,9 @@ const Flex = styled.div`
 class Menu extends Component {
 
     render() {
-        const { userLocFC, kmTargetsFC, zones, updateMinTargets, updateKmTargets } = this.props
+        const { userLocFC, kmTargetsFC, minTargetsFC, zones, updateMinTargets, updateKmTargets, setTransMode } = this.props
         const transMode = zones.transMode
+        const mapMode = zones.mapMode
         if (userLocFC.features.length === 0) {
             return (
                 <LocationMissingMessage>
@@ -44,15 +45,15 @@ class Menu extends Component {
         return (
             <OuterFlex>
                 <Flex>
-                    <Button active={zones.mode === 'distance'} onClick={() => updateKmTargets(userLocFC, kmTargetsFC)}>KM</Button>
-                    <Button active={zones.mode === 'duration'} onClick={() => updateMinTargets(userLocFC, kmTargetsFC, zones.transMode)}>MIN</Button>
+                    <Button active={mapMode === 'distance'} onClick={() => updateKmTargets(userLocFC, kmTargetsFC, transMode)}>KM</Button>
+                    <Button active={mapMode === 'duration'} onClick={() => updateMinTargets(userLocFC, kmTargetsFC, transMode)}>MIN</Button>
                 </Flex>
                 <Flex>
-                    <IconDiv active={transMode === 'BIRD'}> <Bird /> </IconDiv>
-                    <IconDiv active={transMode === 'WALK'}> <Walk /> </IconDiv>
-                    <IconDiv active={transMode === 'BICYCLE'}> <Bike /> </IconDiv>
-                    <IconDiv active={transMode === 'PT'}> <Bus /> </IconDiv>
-                    <IconDiv active={transMode === 'CAR'}> <Car /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, kmTargetsFC, minTargetsFC, 'BIRD', mapMode)} active={transMode === 'BIRD'}> <Bird /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, kmTargetsFC, minTargetsFC, 'WALK', mapMode)} active={transMode === 'WALK'}> <Walk /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, kmTargetsFC, minTargetsFC, 'BICYCLE', mapMode)} active={transMode === 'BICYCLE'}> <Bike /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, kmTargetsFC, minTargetsFC, 'PT', mapMode)} active={transMode === 'PT'}> <Bus /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, kmTargetsFC, minTargetsFC, 'CAR', mapMode)} active={transMode === 'CAR'}> <Car /> </IconDiv>
                 </Flex>
             </OuterFlex>
         )
@@ -61,9 +62,10 @@ class Menu extends Component {
 
 const mapStateToProps = (state) => ({
     kmTargetsFC: state.targets.kmTargetsFC,
+    minTargetsFC: state.targets.minTargetsFC,
     userLocFC: state.userLocation.geoJSONFC,
     zones: state.zones,
 })
-const ConnectedMenu = connect(mapStateToProps, { updateMinTargets, updateKmTargets })(Menu)
+const ConnectedMenu = connect(mapStateToProps, { updateMinTargets, updateKmTargets, setTransMode })(Menu)
 
 export default ConnectedMenu

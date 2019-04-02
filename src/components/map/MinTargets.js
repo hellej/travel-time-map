@@ -57,7 +57,7 @@ class MinTargets extends React.Component {
 
     componentDidUpdate = () => {
         const { map, zones, minTargetsFC, minTargetLabelsFC } = this.props
-        const visibility = zones.mode === 'distance' ? 'none' : 'visible'
+        const visibility = zones.mapMode === 'distance' ? 'none' : 'visible'
 
         if (this.source !== undefined) {
             this.source.setData(minTargetsFC)

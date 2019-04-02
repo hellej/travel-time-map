@@ -45,9 +45,9 @@ class Zones extends React.Component {
     }
 
     componentDidUpdate = () => {
-        const { map, geoJSONFC, mode } = this.props
-        const textColor = mode === 'distance' ? 'white' : '#e8ffd8'
-        const lineColor = mode === 'distance' ? '#dde6ff' : 'white'
+        const { map, geoJSONFC, mapMode } = this.props
+        const textColor = mapMode === 'distance' ? 'white' : '#e8ffd8'
+        const lineColor = mapMode === 'distance' ? '#dde6ff' : 'white'
         if (this.source !== undefined) {
             this.source.setData(geoJSONFC)
             map.setPaintProperty(this.labelsId, 'text-color', textColor)
@@ -68,7 +68,7 @@ class Zones extends React.Component {
 
 const mapStateToProps = (state) => ({
     geoJSONFC: state.zones.zonesFC,
-    mode: state.zones.mode,
+    mapMode: state.zones.mapMode,
 })
 
 const ConnectedZones = connect(mapStateToProps, null)(Zones)

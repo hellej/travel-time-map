@@ -16,6 +16,7 @@ export const IconDiv = styled.div`
     transition-duration: 0.2s;
     -webkit-transition-duration: 0.2s; /* Safari */
     ${props => props.active === true && css`
+        pointer-events: none;
         color: #00fff7;
         border-color: #00fff7;
         pointer-events: none;

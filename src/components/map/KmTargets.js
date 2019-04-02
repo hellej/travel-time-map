@@ -58,7 +58,7 @@ class KmTargets extends React.Component {
 
     componentDidUpdate = () => {
         const { map, zones, kmTargetsFC } = this.props
-        const visibility = zones.mode === 'distance' ? 'visible' : 'none'
+        const visibility = zones.mapMode === 'distance' ? 'visible' : 'none'
 
         if (this.source !== undefined) {
             this.source.setData(kmTargetsFC)

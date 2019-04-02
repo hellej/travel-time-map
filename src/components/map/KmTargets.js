@@ -64,11 +64,15 @@ class KmTargets extends React.Component {
             this.source.setData(kmTargetsFC)
             map.setLayoutProperty(this.layerId, 'visibility', visibility)
             map.setLayoutProperty(this.labelsId, 'visibility', visibility)
+            map.setFilter(this.layerId, ['==', 'transMode', zones.transMode])
+            map.setFilter(this.labelsId, ['==', 'transMode', zones.transMode])
         } else {
             map.once('sourcedata', () => {
                 this.source.setData(kmTargetsFC)
                 map.setLayoutProperty(this.layerId, 'visibility', visibility)
                 map.setLayoutProperty(this.labelsId, 'visibility', visibility)
+                map.setFilter(this.layerId, ['==', 'transMode', zones.transMode])
+                map.setFilter(this.labelsId, ['==', 'transMode', zones.transMode])
             })
         }
     }

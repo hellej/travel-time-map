@@ -62,19 +62,23 @@ class MinTargets extends React.Component {
         if (this.source !== undefined) {
             this.source.setData(minTargetsFC)
             map.setLayoutProperty(this.layerId, 'visibility', visibility)
+            map.setFilter(this.layerId, ['==', 'transMode', zones.transMode])
         } else {
             map.once('sourcedata', () => {
                 this.source.setData(minTargetsFC)
                 map.setLayoutProperty(this.layerId, 'visibility', visibility)
+                map.setFilter(this.layerId, ['==', 'transMode', zones.transMode])
             })
         }
         if (this.labelsSource !== undefined) {
             this.labelsSource.setData(minTargetLabelsFC)
             map.setLayoutProperty(this.labelsId, 'visibility', visibility)
+            map.setFilter(this.labelsId, ['==', 'transMode', zones.transMode])
         } else {
             map.once('sourcedata', () => {
                 this.labelsSource.setData(minTargetLabelsFC)
                 map.setLayoutProperty(this.labelsId, 'visibility', visibility)
+                map.setFilter(this.labelsId, ['==', 'transMode', zones.transMode])
             })
         }
     }

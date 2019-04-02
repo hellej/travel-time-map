@@ -83,21 +83,19 @@ export const updateMinTargets = (userLocFC, kmTargetsFC, mode) => {
         dispatch({ type: 'SET_TRANS_MODE', mode: mode })
 
         const features = kmTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
-        console.log('features', features.slice(0, 8))
+        const closeFeatures = features.slice(0, 8)
 
-        features.slice(0, 10).reduce(async (previousPromise, feature) => {
-            const features = await previousPromise
+        const feats = closeFeatures.map(async (feature) => {
             const targetCoords = feature.geometry.coordinates
             const tts = await dt.getTravelTimes(originCoords, targetCoords, mode)
-            console.log('tts', tts)
             const bearing = turf.getBearing(originCoords, targetCoords)
             const destCoords = turf.getDestination(originCoords, tts.median * 100, bearing)
             const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
             const feat = turf.getCircle(destCoords, { radius, transMode: mode, centreCoords: destCoords, ...feature.properties })
-            features.push(feat)
-            dispatch({ type: 'UPDATE_MIN_TARGETS', minTargetsFC: turf.asFeatureCollection(features) })
-            return features
-        }, Promise.resolve([]))
+            return new Promise((resolve) => resolve(feat))
+        })
+        const featsResolved = await Promise.all(feats)
+        dispatch({ type: 'UPDATE_MIN_TARGETS', minTargetsFC: turf.asFeatureCollection(featsResolved) })
     }
 }
 

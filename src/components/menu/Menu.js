@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { updateTtTargets } from '../../reducers/targetsReducer'
+import { updateMinTargets } from '../../reducers/targetsReducer'
 import { toggleDistanceZones } from '../../reducers/zonesReducer'
 import { Button } from './Button'
 import { IconDiv, Bird, Bus, Bike, Walk, Car } from './StyledIcons'
@@ -33,7 +33,7 @@ const Flex = styled.div`
 class Menu extends Component {
 
     render() {
-        const { userLocFC, realTargetsFC, zones, updateTtTargets, toggleDistanceZones } = this.props
+        const { userLocFC, kmTargetsFC, zones, updateMinTargets, toggleDistanceZones } = this.props
         if (userLocFC.features.length === 0) {
             return (
                 <LocationMissingMessage>
@@ -44,14 +44,14 @@ class Menu extends Component {
         return (
             <OuterFlex>
                 <Flex>
-                    <Button active={zones.mode === 'distance'} onClick={() => toggleDistanceZones(userLocFC, realTargetsFC)}>KM</Button>
-                    <Button active={zones.mode === 'duration'} onClick={() => updateTtTargets(userLocFC, realTargetsFC)}>MIN</Button>
+                    <Button active={zones.mode === 'distance'} onClick={() => toggleDistanceZones(userLocFC, kmTargetsFC)}>KM</Button>
+                    <Button active={zones.mode === 'duration'} onClick={() => updateMinTargets(userLocFC, kmTargetsFC)}>MIN</Button>
                 </Flex>
                 <Flex>
                     <IconDiv active={true}> <Bird /> </IconDiv>
-                    <IconDiv active={false}> <Bus /> </IconDiv>
-                    <IconDiv active={false}> <Bike /> </IconDiv>
                     <IconDiv active={false}> <Walk /> </IconDiv>
+                    <IconDiv active={false}> <Bike /> </IconDiv>
+                    <IconDiv active={false}> <Bus /> </IconDiv>
                     <IconDiv active={false}> <Car /> </IconDiv>
                 </Flex>
             </OuterFlex>
@@ -60,10 +60,10 @@ class Menu extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    realTargetsFC: state.targets.realTargetsFC,
+    kmTargetsFC: state.targets.kmTargetsFC,
     userLocFC: state.userLocation.geoJSONFC,
     zones: state.zones,
 })
-const ConnectedMenu = connect(mapStateToProps, { updateTtTargets, toggleDistanceZones })(Menu)
+const ConnectedMenu = connect(mapStateToProps, { updateMinTargets, toggleDistanceZones })(Menu)
 
 export default ConnectedMenu

@@ -35,7 +35,7 @@ class Zones extends React.Component {
                     'symbol-spacing': 320,
                 },
                 'paint': {
-                    'text-opacity': 0.6,
+                    'text-opacity': 0.8,
                     'text-color': 'white',
                     'text-halo-color': 'black',
                     'text-halo-width': 2

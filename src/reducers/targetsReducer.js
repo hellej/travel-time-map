@@ -3,9 +3,9 @@ import testLocations from '../testLocations.json'
 import * as dt from '../services/digiTransit'
 
 const initialTargets = {
-    realTargetsFC: turf.asFeatureCollection([]),
-    ttTargetsFC: turf.asFeatureCollection([]),
-    ttTargetLabelsFC: turf.asFeatureCollection([]),
+    kmTargetsFC: turf.asFeatureCollection([]),
+    minTargetsFC: turf.asFeatureCollection([]),
+    minTargetLabelsFC: turf.asFeatureCollection([]),
 }
 
 const targetsReducer = (store = initialTargets, action) => {
@@ -14,19 +14,19 @@ const targetsReducer = (store = initialTargets, action) => {
         case 'INITIALIZE_TARGETS':
             return {
                 ...store,
-                realTargetsFC: action.targetsFC,
-                ttTargetsFC: action.targetsFC,
+                kmTargetsFC: action.targetsFC,
+                minTargetsFC: action.targetsFC,
             }
-        case 'UPDATE_TT_TARGETS':
+        case 'UPDATE_MIN_TARGETS':
             return {
                 ...store,
-                ttTargetsFC: action.ttTargetsFC,
-                ttTargetLabelsFC: createLabelPoints(action.ttTargetsFC),
+                minTargetsFC: action.minTargetsFC,
+                minTargetLabelsFC: createLabelPoints(action.minTargetsFC),
             }
         case 'UPDATE_USER_LOCATION': {
             return {
                 ...store,
-                realTargetsFC: updateDistancesToTargets(action.coords, store.realTargetsFC),
+                kmTargetsFC: updateDistancesToTargets(action.coords, store.kmTargetsFC),
             }
         }
         default:
@@ -34,8 +34,8 @@ const targetsReducer = (store = initialTargets, action) => {
     }
 }
 
-const updateDistancesToTargets = (userCoords, realTargetsFC) => {
-    const features = realTargetsFC.features.map(feature => {
+const updateDistancesToTargets = (userCoords, kmTargetsFC) => {
+    const features = kmTargetsFC.features.map(feature => {
         const distance = turf.getDistance(userCoords, feature.geometry.coordinates)
         return { ...feature, properties: { ...feature.properties, distance } }
     })
@@ -59,7 +59,7 @@ export const initializeTargets = () => {
     return { type: 'INITIALIZE_TARGETS', targetsFC: turf.asFeatureCollection(features) }
 }
 
-export const updateTtTargets = (userLocFC, realTargetsFC) => {
+export const updateMinTargets = (userLocFC, kmTargetsFC) => {
     return async (dispatch) => {
         if (userLocFC.features.length === 0) {
             dispatch({ type: 'NO_USER_LOCATION' })
@@ -68,7 +68,7 @@ export const updateTtTargets = (userLocFC, realTargetsFC) => {
         const originCoords = userLocFC.features[0].geometry.coordinates
         dispatch({ type: 'SET_ZONE_MODE_TO_TT', coords: originCoords })
 
-        const features = realTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
+        const features = kmTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
         console.log('features', features.slice(0, 8))
 
         features.slice(0, 10).reduce(async (previousPromise, feature) => {
@@ -81,7 +81,7 @@ export const updateTtTargets = (userLocFC, realTargetsFC) => {
             const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
             const feat = turf.getCircle(destCoords, { radius, centreCoords: destCoords, ...feature.properties })
             features.push(feat)
-            dispatch({ type: 'UPDATE_TT_TARGETS', ttTargetsFC: turf.asFeatureCollection(features) })
+            dispatch({ type: 'UPDATE_MIN_TARGETS', minTargetsFC: turf.asFeatureCollection(features) })
             return features
         }, Promise.resolve([]))
     }

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import Map from './components/map/Map'
 import UserLocation from './components/map/UserLocation'
 import Zones from './components/map/Zones'
-import RealTargets from './components/map/RealTargets'
-import TtTargets from './components/map/TtTargets'
+import KmTargets from './components/map/KmTargets'
+import MinTargets from './components/map/MinTargets'
 import MapControl from './components/map/MapControl'
 import Menu from './components/menu/Menu'
 import styled from 'styled-components'
@@ -31,8 +31,8 @@ class App extends Component {
           <MapControl />
           <UserLocation />
           <Zones />
-          <RealTargets />
-          <TtTargets />
+          <KmTargets />
+          <MinTargets />
         </Map>
       </div>
     )

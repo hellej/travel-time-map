@@ -2,18 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { initializeTargets } from '../../reducers/targetsReducer'
 
-class RealTargets extends React.Component {
-
+class MinTargets extends React.Component {
+    layerId = 'minTargets'
     source
-    layerId = 'realTargets'
-    labelsId = 'realTargetsLabels'
+    labelsId = 'minTargetsLabels'
+    labelsSource
 
-    circlePaint = {
-        'circle-color': 'transparent',
-        'circle-opacity': 0.5,
-        'circle-radius': 5,
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#b7ff84',
+    paint = {
+        'fill-color': '#ff99f4',
+        'fill-opacity': 0.8,
     }
     labelPaint = {
         'text-color': 'white',
@@ -24,32 +21,34 @@ class RealTargets extends React.Component {
     labelLayout = {
         'symbol-placement': 'point',
         'text-anchor': 'left',
-        'text-offset': [0.8, 0],
+        'text-offset': [0.2, 0],
         'text-allow-overlap': true,
         'text-ignore-placement': false,
         'text-field': '{name}',
         'text-font': ['Open Sans Regular'],
-        'text-size': 13,
+        'text-size': 14,
     }
 
     componentDidMount() {
         this.props.initializeTargets()
-        const { map, realTargetsFC } = this.props
+        const { map, minTargetsFC, minTargetLabelsFC } = this.props
         map.once('load', () => {
             // Add layer
-            map.addSource(this.layerId, { type: 'geojson', data: realTargetsFC })
+            map.addSource(this.layerId, { type: 'geojson', data: minTargetsFC })
             this.source = map.getSource(this.layerId)
             map.addLayer({
                 id: this.layerId,
                 source: this.layerId,
-                type: 'circle',
-                paint: this.circlePaint,
+                type: 'fill',
+                paint: this.paint,
             }, 'zones')
             // Add labels
+            map.addSource(this.labelsId, { type: 'geojson', data: minTargetLabelsFC })
+            this.labelsSource = map.getSource(this.labelsId)
             map.addLayer({
                 'id': this.labelsId,
                 'type': 'symbol',
-                'source': this.layerId,
+                'source': this.labelsId,
                 'layout': this.labelLayout,
                 'paint': this.labelPaint,
             })
@@ -57,17 +56,24 @@ class RealTargets extends React.Component {
     }
 
     componentDidUpdate = () => {
-        const { map, zones, realTargetsFC } = this.props
-        const visibility = zones.mode === 'distance' ? 'visible' : 'none'
+        const { map, zones, minTargetsFC, minTargetLabelsFC } = this.props
+        const visibility = zones.mode === 'distance' ? 'none' : 'visible'
 
         if (this.source !== undefined) {
-            this.source.setData(realTargetsFC)
+            this.source.setData(minTargetsFC)
             map.setLayoutProperty(this.layerId, 'visibility', visibility)
+        } else {
+            map.once('sourcedata', () => {
+                this.source.setData(minTargetsFC)
+                map.setLayoutProperty(this.layerId, 'visibility', visibility)
+            })
+        }
+        if (this.labelsSource !== undefined) {
+            this.labelsSource.setData(minTargetLabelsFC)
             map.setLayoutProperty(this.labelsId, 'visibility', visibility)
         } else {
             map.once('sourcedata', () => {
-                this.source.setData(realTargetsFC)
-                map.setLayoutProperty(this.layerId, 'visibility', visibility)
+                this.labelsSource.setData(minTargetLabelsFC)
                 map.setLayoutProperty(this.labelsId, 'visibility', visibility)
             })
         }
@@ -79,10 +85,11 @@ class RealTargets extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    realTargetsFC: state.targets.realTargetsFC,
+    minTargetsFC: state.targets.minTargetsFC,
+    minTargetLabelsFC: state.targets.minTargetLabelsFC,
     zones: state.zones,
 })
 
-const ConnectedRealTargets = connect(mapStateToProps, { initializeTargets })(RealTargets)
+const ConnectedMinTargets = connect(mapStateToProps, { initializeTargets })(MinTargets)
 
-export default ConnectedRealTargets
+export default ConnectedMinTargets

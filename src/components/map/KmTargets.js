@@ -2,15 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { initializeTargets } from '../../reducers/targetsReducer'
 
-class TtTargets extends React.Component {
-    layerId = 'ttTargets'
-    source
-    labelsId = 'ttTargetsLabels'
-    labelsSource
+class KmTargets extends React.Component {
 
-    paint = {
-        'fill-color': '#ff99f4',
-        'fill-opacity': 0.8,
+    source
+    layerId = 'kmTargets'
+    labelsId = 'kmTargetsLabels'
+
+    circlePaint = {
+        'circle-color': 'transparent',
+        'circle-opacity': 0.5,
+        'circle-radius': 5,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#b7ff84',
     }
     labelPaint = {
         'text-color': 'white',
@@ -21,34 +24,32 @@ class TtTargets extends React.Component {
     labelLayout = {
         'symbol-placement': 'point',
         'text-anchor': 'left',
-        'text-offset': [0.2, 0],
+        'text-offset': [0.8, 0],
         'text-allow-overlap': true,
         'text-ignore-placement': false,
         'text-field': '{name}',
         'text-font': ['Open Sans Regular'],
-        'text-size': 14,
+        'text-size': 13,
     }
 
     componentDidMount() {
         this.props.initializeTargets()
-        const { map, ttTargetsFC, ttTargetLabelsFC } = this.props
+        const { map, kmTargetsFC } = this.props
         map.once('load', () => {
             // Add layer
-            map.addSource(this.layerId, { type: 'geojson', data: ttTargetsFC })
+            map.addSource(this.layerId, { type: 'geojson', data: kmTargetsFC })
             this.source = map.getSource(this.layerId)
             map.addLayer({
                 id: this.layerId,
                 source: this.layerId,
-                type: 'fill',
-                paint: this.paint,
+                type: 'circle',
+                paint: this.circlePaint,
             }, 'zones')
             // Add labels
-            map.addSource(this.labelsId, { type: 'geojson', data: ttTargetLabelsFC })
-            this.labelsSource = map.getSource(this.labelsId)
             map.addLayer({
                 'id': this.labelsId,
                 'type': 'symbol',
-                'source': this.labelsId,
+                'source': this.layerId,
                 'layout': this.labelLayout,
                 'paint': this.labelPaint,
             })
@@ -56,24 +57,17 @@ class TtTargets extends React.Component {
     }
 
     componentDidUpdate = () => {
-        const { map, zones, ttTargetsFC, ttTargetLabelsFC } = this.props
-        const visibility = zones.mode === 'distance' ? 'none' : 'visible'
+        const { map, zones, kmTargetsFC } = this.props
+        const visibility = zones.mode === 'distance' ? 'visible' : 'none'
 
         if (this.source !== undefined) {
-            this.source.setData(ttTargetsFC)
+            this.source.setData(kmTargetsFC)
             map.setLayoutProperty(this.layerId, 'visibility', visibility)
-        } else {
-            map.once('sourcedata', () => {
-                this.source.setData(ttTargetsFC)
-                map.setLayoutProperty(this.layerId, 'visibility', visibility)
-            })
-        }
-        if (this.labelsSource !== undefined) {
-            this.labelsSource.setData(ttTargetLabelsFC)
             map.setLayoutProperty(this.labelsId, 'visibility', visibility)
         } else {
             map.once('sourcedata', () => {
-                this.labelsSource.setData(ttTargetLabelsFC)
+                this.source.setData(kmTargetsFC)
+                map.setLayoutProperty(this.layerId, 'visibility', visibility)
                 map.setLayoutProperty(this.labelsId, 'visibility', visibility)
             })
         }
@@ -85,11 +79,10 @@ class TtTargets extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    ttTargetsFC: state.targets.ttTargetsFC,
-    ttTargetLabelsFC: state.targets.ttTargetLabelsFC,
+    kmTargetsFC: state.targets.kmTargetsFC,
     zones: state.zones,
 })
 
-const ConnectedTtTargets = connect(mapStateToProps, { initializeTargets })(TtTargets)
+const ConnectedKmTargets = connect(mapStateToProps, { initializeTargets })(KmTargets)
 
-export default ConnectedTtTargets
+export default ConnectedKmTargets

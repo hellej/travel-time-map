@@ -13,6 +13,7 @@ const getItineraryQuery = (originCoords, targetCoords) => {
             ) {
                 itineraries {
                     duration
+                    walkDistance
                 }
             }
         }`
@@ -28,12 +29,23 @@ const getModeItineraryQuery = (originCoords, targetCoords, mode) => {
             ) {
                 itineraries {
                     duration
+                    walkDistance
                 }
             }
         }`
 }
 
 const asMins = (secs) => Math.round(secs / 60)
+
+export const getTravelDistance = async (originCoords, targetCoords, mode) => {
+    let data
+    if (mode === 'PT') {
+        data = await client.request(getItineraryQuery(originCoords, targetCoords))
+    } else {
+        data = await client.request(getModeItineraryQuery(originCoords, targetCoords, mode))
+    }
+    return data.plan.itineraries[0].walkDistance
+}
 
 export const getTravelTimes = async (originCoords, targetCoords, mode) => {
     let data

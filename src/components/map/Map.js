@@ -43,7 +43,7 @@ class Map extends React.Component {
     this.map.on('load', () => {
       console.log('map loaded')
       this.setState({ loaded: true, isReady: true })
-      // this.map.addControl(new MapboxGL.NavigationControl(), 'bottom-right')
+      this.map.addControl(new MapboxGL.NavigationControl({ showZoom: false }), 'top-right')
       this.props.initializeMap()
     })
 

@@ -13,4 +13,4 @@ export const BASEMAPS = {
   }
 }
 
-export const initialMapCenter = { lng: 24.935486, lat: 60.215779 }
+export const initialMapCenter = { lng: 24.9119, lat: 60.4194 }

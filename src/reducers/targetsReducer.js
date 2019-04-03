@@ -2,11 +2,13 @@ import { turf } from '../utils/index'
 import testLocations from '../testLocations.json'
 import * as dt from '../services/digiTransit'
 
+const emptyFC = turf.asFeatureCollection([])
+
 const initialTargets = {
-    initialTargetsFC: turf.asFeatureCollection([]),
-    kmTargetsFC: turf.asFeatureCollection([]),
-    minTargetsFC: turf.asFeatureCollection([]),
-    minTargetLabelsFC: turf.asFeatureCollection([]),
+    initialTargetsFC: emptyFC,
+    kmTargetsFC: emptyFC,
+    minTargetsFC: emptyFC,
+    minTargetLabelsFC: emptyFC,
 }
 
 const targetsReducer = (store = initialTargets, action) => {
@@ -17,6 +19,8 @@ const targetsReducer = (store = initialTargets, action) => {
                 ...store,
                 initialTargetsFC: action.targetsFC,
                 kmTargetsFC: action.targetsFC,
+                minTargetsFC: emptyFC,
+                minTargetLabelsFC: emptyFC,
             }
         case 'UPDATE_KM_TARGETS': {
             const kmTargetsFC = turf.combineFCs(store.kmTargetsFC, action.kmTargetsFC)
@@ -54,7 +58,7 @@ export const initializeTargets = () => {
 
 const updateDistancesToTargets = (userCoords, kmTargetsFC) => {
     const features = kmTargetsFC.features.map(feature => {
-        const distance = turf.getDistance(userCoords, feature.geometry.coordinates)
+        const distance = turf.getDistance(userCoords, feature.properties.realCoords)
         return { ...feature, properties: { ...feature.properties, distance } }
     })
     return turf.asFeatureCollection(features)
@@ -67,6 +71,14 @@ const createLabelPoints = (FC) => {
         return turf.asPoint(offsetCoords, feature.properties)
     })
     return turf.asFeatureCollection(features)
+}
+export const updateTargets = (userLocFC, initialTargetsFC, transMode, mapMode) => {
+    return async (dispatch) => {
+        const userCoords = userLocFC.features[0].geometry.coordinates
+        const targetsFC = updateDistancesToTargets(userCoords, initialTargetsFC)
+        dispatch({ type: 'INITIALIZE_TARGETS', targetsFC })
+        dispatch(setTransMode(userLocFC, targetsFC, targetsFC, emptyFC, transMode, mapMode))
+    }
 }
 
 export const setTransMode = (userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, mapMode) => {

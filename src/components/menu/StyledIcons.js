@@ -4,12 +4,14 @@ import { FaBus } from 'react-icons/fa'
 import { IoIosBicycle } from 'react-icons/io'
 import { IoIosWalk } from 'react-icons/io'
 import { IoMdCar } from 'react-icons/io'
+import { IoMdRefresh } from 'react-icons/io'
 
 export const IconDiv = styled.div`
     border-radius: 8px;
     background-color: #000000b5;
     border: 1px solid white;
-    margin: 4px 5px 0px 5px;
+    // margin: 4px 5px 0px 5px;
+    margin: 5px 6px;
     padding: 9px 10px;
     display: table;
     cursor: pointer;
@@ -65,4 +67,27 @@ export const Car = styled(IoMdCar)`
     vertical-align: middle;
     display: table-cell;
     text-align: center;
+    `
+export const SmallIcon = styled.div`
+    border-radius: 8px;
+    background-color: #000000b5;
+    border: 1px solid white;
+    // margin: 4px 5px 0px 5px;
+    margin: 5px 8px;
+    padding: 5px 7px;
+    display: table;
+    cursor: pointer;
+    color: white;
+    transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s; /* Safari */
+    &:hover { 
+        color: #46ff66;
+        border-color: #46ff66;
+    }
+`
+export const Refresh = styled(IoMdRefresh)`
+    font-size: 26px;
+    vertical-align: middle;
+    display: table-cell;
+    text-align: center;   
 `

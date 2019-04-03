@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { setTransMode } from '../../reducers/targetsReducer'
+import { setTransMode, updateTargets } from '../../reducers/targetsReducer'
 import { setMapMode } from '../../reducers/zonesReducer'
 import { Button } from './Button'
-import { IconDiv, Bird, Bus, Bike, Walk, Car } from './StyledIcons'
+import { IconDiv, SmallIcon, Bird, Bus, Bike, Walk, Car, Refresh } from './StyledIcons'
 
 const LocationMissingMessage = styled.div`
     color: white;
@@ -27,13 +27,14 @@ const FlexRow = styled.div`
     width: max-content;
     margin: 6px 0 0 0;
     justify-content: flex-start;
+    align-items: center;
     pointer-events: auto;
 `
 
 class Menu extends Component {
 
     render() {
-        const { userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, zones, setMapMode, setTransMode } = this.props
+        const { userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, zones, setMapMode, setTransMode, updateTargets } = this.props
         const transMode = zones.transMode
         const mapMode = zones.mapMode
         if (userLocFC.features.length === 0) {
@@ -48,6 +49,7 @@ class Menu extends Component {
                 <FlexRow>
                     <Button active={mapMode === 'distance'} onClick={() => setMapMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, 'distance')}>KM</Button>
                     <Button active={mapMode === 'duration'} onClick={() => setMapMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, 'duration')}>MIN</Button>
+                    <SmallIcon onClick={() => updateTargets(userLocFC, initialTargetsFC, transMode, mapMode)}> <Refresh /> </SmallIcon>
                 </FlexRow>
                 <FlexRow>
                     <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'BIRD', mapMode)} active={transMode === 'BIRD'} disabled={mapMode === 'duration'}> <Bird /> </IconDiv>
@@ -68,6 +70,6 @@ const mapStateToProps = (state) => ({
     userLocFC: state.userLocation.geoJSONFC,
     zones: state.zones,
 })
-const ConnectedMenu = connect(mapStateToProps, { setTransMode, setMapMode })(Menu)
+const ConnectedMenu = connect(mapStateToProps, { setTransMode, setMapMode, updateTargets })(Menu)
 
 export default ConnectedMenu

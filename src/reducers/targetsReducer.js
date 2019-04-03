@@ -107,6 +107,7 @@ export const updateKmTargets = (userLocFC, initialTargetsFC, kmTargetsFC, transM
                 })
                 dispatch({ type: 'UPDATE_KM_TARGETS', kmTargetsFC: turf.asFeatureCollection(feats) })
             } else {
+                dispatch({ type: 'KM_QUERY_STARTED' })
                 const feats = await initialTargetsFC.features.map(async (feature) => {
                     const targetCoords = feature.properties.realCoords
                     const bearing = turf.getBearing(userCoords, targetCoords)
@@ -132,6 +133,7 @@ export const updateMinTargets = (userLocFC, initialTargetsFC, minTargetsFC, mode
 
         const alreadyGot = minTargetsFC.features.filter(feat => feat.properties.transMode === transMode)
         if (alreadyGot.length === 0) {
+            dispatch({ type: 'MIN_QUERY_STARTED' })
             const features = initialTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
             const closeFeatures = features.slice(0, 9)
             const userCoords = userLocFC.features[0].geometry.coordinates

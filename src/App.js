@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Notification from './components/Notification'
 import Map from './components/map/Map'
 import UserLocation from './components/map/UserLocation'
 import Zones from './components/map/Zones'
@@ -24,6 +25,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <Notification />
         <BottomPanel>
           <Menu />
         </BottomPanel>

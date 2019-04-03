@@ -5,12 +5,14 @@ import mapReducer from './reducers/mapReducer'
 import userLocationReducer from './reducers/userLocationReducer'
 import zonesReducer from './reducers/zonesReducer'
 import targetsReducer from './reducers/targetsReducer'
+import notificationReducer from './reducers/notificationReducer'
 
 const reducer = combineReducers({
   map: mapReducer,
   userLocation: userLocationReducer,
   zones: zonesReducer,
   targets: targetsReducer,
+  notification: notificationReducer,
 })
 
 const store = createStore(

@@ -2,37 +2,28 @@ import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-const StyledNotificationContainer = styled.div`
-  position: absolute; 
-  z-index: 4;
-  right: 53px;
-  top: 10px;
-  left: 20px; 
-  margin: auto;
-`
 const StyledNotificationDiv = styled.div`
-  margin: auto;
-  border-radius: 4px;
+  margin: 5px 6px;
+  padding: 4px 9px;
+  border-radius: 5px;
+  border: 1px solid grey;
   width: max-content;
   color: white;
   background: rgba(0, 0, 0, 0.74);
   display: inline-block;
   line-height: 1.5;
   font-size: 20px;
-  font-weight: 400;
-  letter-spacing: 1.5px;
-  padding: 5px;
+  font-weight: 300;
+  letter-spacing: 1.3px;
 `
 
 const Notification = (props) => {
   if (props.notification.text === null) return null
 
   return (
-    <StyledNotificationContainer>
-      <StyledNotificationDiv>
-        {props.notification.text}
-      </StyledNotificationDiv>
-    </StyledNotificationContainer>
+    <StyledNotificationDiv>
+      {props.notification.text}
+    </StyledNotificationDiv>
   )
 }
 

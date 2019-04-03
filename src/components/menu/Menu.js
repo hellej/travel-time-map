@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { setTransMode, updateTargets } from '../../reducers/targetsReducer'
 import { setMapMode } from '../../reducers/zonesReducer'
+import Notification from './../Notification'
 import { Button } from './Button'
 import { IconDiv, SmallIcon, Bird, Bus, Bike, Walk, Car, Refresh } from './StyledIcons'
 
@@ -46,6 +47,7 @@ class Menu extends Component {
         }
         return (
             <OuterFlex>
+                <Notification />
                 <FlexRow>
                     <Button active={mapMode === 'distance'} onClick={() => setMapMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, 'distance')}>KM</Button>
                     <Button active={mapMode === 'duration'} onClick={() => setMapMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, 'duration')}>MIN</Button>

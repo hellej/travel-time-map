@@ -9,6 +9,7 @@ export const Button = styled.div.attrs(props => ({
   padding: 6px 13px;
   border: 1px solid;
   border-radius: 8px;
+  background-color: #000000b5;
   margin: 5px 6px;
   font-weight: 300;
   font-size: 28px;

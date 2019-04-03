@@ -20,12 +20,12 @@ const OuterFlex = styled.div`
     flex-direction: column;
     margin: 0 10px 0 10px;
 `
-const Flex = styled.div`
+const FlexRow = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: max-content;
-    margin: 10px 0 0 0;
+    margin: 6px 0 0 0;
     justify-content: flex-start;
     pointer-events: auto;
 `
@@ -45,17 +45,17 @@ class Menu extends Component {
         }
         return (
             <OuterFlex>
-                <Flex>
+                <FlexRow>
                     <Button active={mapMode === 'distance'} onClick={() => setMapMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, 'distance')}>KM</Button>
                     <Button active={mapMode === 'duration'} onClick={() => setMapMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, 'duration')}>MIN</Button>
-                </Flex>
-                <Flex>
-                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'BIRD', mapMode)} active={transMode === 'BIRD'}> <Bird /> </IconDiv>
-                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'WALK', mapMode)} active={transMode === 'WALK'}> <Walk /> </IconDiv>
-                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'BICYCLE', mapMode)} active={transMode === 'BICYCLE'}> <Bike /> </IconDiv>
-                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'PT', mapMode)} active={transMode === 'PT'}> <Bus /> </IconDiv>
-                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'CAR', mapMode)} active={transMode === 'CAR'}> <Car /> </IconDiv>
-                </Flex>
+                </FlexRow>
+                <FlexRow>
+                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'BIRD', mapMode)} active={transMode === 'BIRD'} disabled={mapMode === 'duration'}> <Bird /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'WALK', mapMode)} active={transMode === 'WALK'} disabled={false}> <Walk /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'BICYCLE', mapMode)} active={transMode === 'BICYCLE'} disabled={false}> <Bike /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'PT', mapMode)} active={transMode === 'PT'} disabled={mapMode === 'distance'}> <Bus /> </IconDiv>
+                    <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'CAR', mapMode)} active={transMode === 'CAR'} disabled={mapMode === 'distance'}> <Car /> </IconDiv>
+                </FlexRow>
             </OuterFlex>
         )
     }

@@ -7,6 +7,7 @@ import { IoMdCar } from 'react-icons/io'
 
 export const IconDiv = styled.div`
     border-radius: 8px;
+    background-color: #000000b5;
     border: 1px solid white;
     margin: 4px 5px 0px 5px;
     padding: 9px 10px;
@@ -28,6 +29,11 @@ export const IconDiv = styled.div`
             color: #00fff7;
             border-color: #00fff7;
         }
+    `}
+    ${props => props.disabled === true && css`
+        color: grey;
+        border-color: grey;
+        pointer-events: none;
     `}
 `
 export const Bird = styled(FaDove)`

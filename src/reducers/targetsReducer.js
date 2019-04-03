@@ -3,6 +3,7 @@ import testLocations from '../testLocations.json'
 import * as dt from '../services/digiTransit'
 
 const initialTargets = {
+    initialTargetsFC: turf.asFeatureCollection([]),
     kmTargetsFC: turf.asFeatureCollection([]),
     minTargetsFC: turf.asFeatureCollection([]),
     minTargetLabelsFC: turf.asFeatureCollection([]),
@@ -14,24 +15,26 @@ const targetsReducer = (store = initialTargets, action) => {
         case 'INITIALIZE_TARGETS':
             return {
                 ...store,
+                initialTargetsFC: action.targetsFC,
                 kmTargetsFC: action.targetsFC,
-                minTargetsFC: action.targetsFC,
             }
         case 'UPDATE_KM_TARGETS':
             return {
                 ...store,
                 kmTargetsFC: action.targetsFC,
             }
-        case 'UPDATE_MIN_TARGETS':
+        case 'UPDATE_MIN_TARGETS': {
+            const minTargetsFC = turf.combineFCs(store.minTargetsFC, action.minTargetsFC)
             return {
                 ...store,
-                minTargetsFC: action.minTargetsFC,
-                minTargetLabelsFC: createLabelPoints(action.minTargetsFC),
+                minTargetsFC,
+                minTargetLabelsFC: createLabelPoints(minTargetsFC),
             }
+        }
         case 'UPDATE_USER_LOCATION': {
             return {
                 ...store,
-                kmTargetsFC: updateDistancesToTargets(action.coords, store.kmTargetsFC),
+                initialTargetsFC: updateDistancesToTargets(action.coords, store.initialTargetsFC),
             }
         }
         default:
@@ -64,61 +67,69 @@ export const initializeTargets = () => {
     return { type: 'INITIALIZE_TARGETS', targetsFC: turf.asFeatureCollection(features) }
 }
 
-export const setTransMode = (userLocFC, kmTargetsFC, minTargetsFC, transMode, mapMode) => {
+export const setTransMode = (userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, mapMode) => {
     return async (dispatch) => {
         dispatch({ type: 'SET_TRANS_MODE', transMode })
+        if (mapMode === 'distance') {
+            dispatch(updateKmTargets(userLocFC, initialTargetsFC, kmTargetsFC, transMode))
+        } else {
+            dispatch(updateMinTargets(userLocFC, initialTargetsFC, minTargetsFC, transMode))
+        }
     }
 }
 
-export const updateKmTargets = (userLocFC, kmTargetsFC, transMode) => {
+export const updateKmTargets = (userLocFC, initialTargetsFC, kmTargetsFC, transMode) => {
     return async (dispatch) => {
         const originCoords = userLocFC.features[0].geometry.coordinates
-        if (transMode !== 'BIRD') {
+        if (transMode === 'BIRD') {
             const feats = kmTargetsFC.features.map((feature) => {
                 const realCoords = feature.properties.realCoords
-                return { ...feature, geometry: { ...feature.geometry, coordinates: realCoords } }
+                return { ...feature, properties: { ...feature.properties, transMode }, geometry: { ...feature.geometry, coordinates: realCoords } }
             })
             dispatch({ type: 'UPDATE_KM_TARGETS', targetsFC: turf.asFeatureCollection(feats) })
         } else {
-            const feats = kmTargetsFC.features.map(async (feature) => {
+            const feats = await kmTargetsFC.features.map(async (feature) => {
                 const targetCoords = feature.properties.realCoords
                 const bearing = turf.getBearing(originCoords, targetCoords)
-                const distance = await dt.getTravelTimes(originCoords, targetCoords, transMode)
+                const distance = await dt.getTravelDistance(originCoords, targetCoords, transMode)
                 const destCoords = turf.getDestination(originCoords, distance, bearing)
-                return { ...feature, geometry: { ...feature.geometry, coordinates: destCoords } }
+                return { ...feature, properties: { ...feature.properties, transMode }, geometry: { ...feature.geometry, coordinates: destCoords } }
             })
-            dispatch({ type: 'UPDATE_KM_TARGETS', targetsFC: turf.asFeatureCollection(feats) })
+            const featsResolved = await Promise.all(feats)
+            dispatch({ type: 'UPDATE_KM_TARGETS', targetsFC: turf.asFeatureCollection(featsResolved) })
         }
-        dispatch({ type: 'TOGGLE_DISTANCE_ZONES', coords: originCoords })
     }
 }
 
-export const updateMinTargets = (userLocFC, kmTargetsFC, mode) => {
+export const updateMinTargets = (userLocFC, initialTargetsFC, minTargetsFC, mode) => {
     return async (dispatch) => {
         if (userLocFC.features.length === 0) {
             dispatch({ type: 'NO_USER_LOCATION' })
             return
         }
-        const transMode = mode === 'BIRD' ? 'BICYCLE' : mode
-
-        const originCoords = userLocFC.features[0].geometry.coordinates
-        dispatch({ type: 'SET_ZONE_MODE_TO_MIN', coords: originCoords })
+        const transMode = mode === 'BIRD' ? 'WALK' : mode
         dispatch({ type: 'SET_TRANS_MODE', transMode })
 
-        const features = kmTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
-        const closeFeatures = features.slice(0, 8)
+        const alreadyGot = minTargetsFC.features.filter(feat => feat.properties.transMode === transMode)
 
-        const feats = closeFeatures.map(async (feature) => {
-            const targetCoords = feature.properties.realCoords
-            const tts = await dt.getTravelTimes(originCoords, targetCoords, transMode)
-            const bearing = turf.getBearing(originCoords, targetCoords)
-            const destCoords = turf.getDestination(originCoords, tts.median * 100, bearing)
-            const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
-            const feat = turf.getCircle(destCoords, { ...feature.properties, radius, transMode, centreCoords: destCoords })
-            return new Promise((resolve) => resolve(feat))
-        })
-        const featsResolved = await Promise.all(feats)
-        dispatch({ type: 'UPDATE_MIN_TARGETS', minTargetsFC: turf.asFeatureCollection(featsResolved) })
+        if (alreadyGot.length === 0) {
+            const features = initialTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
+            const closeFeatures = features.slice(0, 9)
+            const originCoords = userLocFC.features[0].geometry.coordinates
+            const feats = closeFeatures.map(async (feature) => {
+                const targetCoords = feature.properties.realCoords
+                const tts = await dt.getTravelTimes(originCoords, targetCoords, transMode)
+                const bearing = turf.getBearing(originCoords, targetCoords)
+                const destCoords = turf.getDestination(originCoords, tts.median * 100, bearing)
+                const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
+                if (isNaN(destCoords[0])) return new Promise((resolve) => resolve(null))
+                const feat = turf.getCircle(destCoords, { ...feature.properties, radius, transMode, centreCoords: destCoords })
+                return new Promise((resolve) => resolve(feat))
+            })
+            const featsResolved = await Promise.all(feats)
+            const featsNotNull = featsResolved.filter(feat => feat !== null)
+            dispatch({ type: 'UPDATE_MIN_TARGETS', minTargetsFC: turf.asFeatureCollection(featsNotNull) })
+        }
     }
 }
 

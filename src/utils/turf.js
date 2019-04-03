@@ -41,3 +41,7 @@ export const getDestination = (originCoords, distance, bearing) => {
   const dest = destination(point, distance, bearing, { units: 'meters' })
   return dest.geometry.coordinates
 }
+
+export const combineFCs = (fc1, fc2) => {
+  return asFeatureCollection(fc1.features.concat(fc2.features))
+}

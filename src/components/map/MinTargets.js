@@ -9,8 +9,14 @@ class MinTargets extends React.Component {
     labelsSource
 
     paint = {
-        'fill-color': '#ff99f4',
-        'fill-opacity': 0.8,
+        'fill-opacity': 1,
+        'fill-color': [
+            'match',
+            ['get', 'operating'],
+            'no', '#ff70ae',
+            'yes', '#51ff7c',
+            /* other */ '#51ff7c'
+        ],
     }
     labelPaint = {
         'text-color': 'white',

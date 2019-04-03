@@ -1,23 +1,23 @@
 {
-    "type": "FeatureCollection",
-    "name": "pools",
-    "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-    "features": [
-    { "type": "Feature", "properties": { "fid": 1, "name": "Allas Sea Pool" }, "geometry": { "type": "Point", "coordinates": [ 24.957312, 60.167 ] } },
-    { "type": "Feature", "properties": { "fid": 2, "name": "Yrjönkatu" }, "geometry": { "type": "Point", "coordinates": [ 24.939082, 60.16832 ] } },
-    { "type": "Feature", "properties": { "fid": 3, "name": "Töölö" }, "geometry": { "type": "Point", "coordinates": [ 24.911745, 60.189858 ] } },
-    { "type": "Feature", "properties": { "fid": 5, "name": "Kallio" }, "geometry": { "type": "Point", "coordinates": [ 24.947576, 60.186771 ] } },
-    { "type": "Feature", "properties": { "fid": 6, "name": "Pirkkola" }, "geometry": { "type": "Point", "coordinates": [ 24.910801, 60.232208 ] } },
-    { "type": "Feature", "properties": { "fid": 7, "name": "Malmi" }, "geometry": { "type": "Point", "coordinates": [ 25.016386, 60.251061 ] } },
-    { "type": "Feature", "properties": { "fid": 8, "name": "Itäkeskus" }, "geometry": { "type": "Point", "coordinates": [ 25.076749, 60.212655 ] } },
-    { "type": "Feature", "properties": { "fid": 9, "name": "Vuosaari" }, "geometry": { "type": "Point", "coordinates": [ 25.141132, 60.20903 ] } },
-    { "type": "Feature", "properties": { "fid": 10, "name": "Kontula" }, "geometry": { "type": "Point", "coordinates": [ 25.085104, 60.237193 ] } },
-    { "type": "Feature", "properties": { "fid": 11, "name": "Jakomäki" }, "geometry": { "type": "Point", "coordinates": [ 25.080352, 60.259797 ] } },
-    { "type": "Feature", "properties": { "fid": 12, "name": "Siltamäki" }, "geometry": { "type": "Point", "coordinates": [ 24.989515, 60.274831 ] } },
-    { "type": "Feature", "properties": { "fid": 13, "name": "Mäkelänrinne" }, "geometry": { "type": "Point", "coordinates": [ 24.947843, 60.199694 ] } },
-    { "type": "Feature", "properties": { "fid": 15, "name": "Leppävaara" }, "geometry": { "type": "Point", "coordinates": [ 24.802685, 60.225441 ] } },
-    { "type": "Feature", "properties": { "fid": 16, "name": "Tapiola" }, "geometry": { "type": "Point", "coordinates": [ 24.80725, 60.178498 ] } },
-{ "type": "Feature", "properties": { "fid": null, "name": "Kumpula" }, "geometry": { "type": "Point", "coordinates": [ 24.958890133798754, 60.208759284619084 ] } },
-{ "type": "Feature", "properties": { "fid": null, "name": "Stadikka" }, "geometry": { "type": "Point", "coordinates": [ 24.930442210606927, 60.188816633600737 ] } }
+"type": "FeatureCollection",
+"name": "pools",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "fid": 1, "name": "Allas Sea Pool", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.957312, 60.167 ] } },
+{ "type": "Feature", "properties": { "fid": 2, "name": "Yrjönkatu", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.939082, 60.16832 ] } },
+{ "type": "Feature", "properties": { "fid": 3, "name": "Töölö", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.911745, 60.189858 ] } },
+{ "type": "Feature", "properties": { "fid": 5, "name": "Kallio", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.947576, 60.186771 ] } },
+{ "type": "Feature", "properties": { "fid": 6, "name": "Pirkkola", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.910801, 60.232208 ] } },
+{ "type": "Feature", "properties": { "fid": 7, "name": "Malmi", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.016386, 60.251061 ] } },
+{ "type": "Feature", "properties": { "fid": 8, "name": "Itäkeskus", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.076749, 60.212655 ] } },
+{ "type": "Feature", "properties": { "fid": 9, "name": "Vuosaari", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.141132, 60.20903 ] } },
+{ "type": "Feature", "properties": { "fid": 10, "name": "Kontula", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.085104, 60.237193 ] } },
+{ "type": "Feature", "properties": { "fid": 11, "name": "Jakomäki", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.080352, 60.259797 ] } },
+{ "type": "Feature", "properties": { "fid": 12, "name": "Siltamäki", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.989515, 60.274831 ] } },
+{ "type": "Feature", "properties": { "fid": 13, "name": "Mäkelänrinne", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.947843, 60.199694 ] } },
+{ "type": "Feature", "properties": { "fid": 15, "name": "Leppävaara", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.802685, 60.225441 ] } },
+{ "type": "Feature", "properties": { "fid": 16, "name": "Tapiola", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.80725, 60.178498 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Kumpula", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.958890133798754, 60.208759284619084 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Stadikka", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.930442210606927, 60.188816633600737 ] } }
 ]
 }

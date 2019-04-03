@@ -10,10 +10,16 @@ class KmTargets extends React.Component {
 
     circlePaint = {
         'circle-color': 'transparent',
-        'circle-opacity': 0.5,
+        'circle-opacity': 0.7,
         'circle-radius': 5,
         'circle-stroke-width': 2,
-        'circle-stroke-color': '#b7ff84',
+        'circle-stroke-color': [
+            'match',
+            ['get', 'operating'],
+            'no', '#ff70ae',
+            'yes', '#51ff7c',
+            /* other */ '#51ff7c'
+        ],
     }
     labelPaint = {
         'text-color': 'white',

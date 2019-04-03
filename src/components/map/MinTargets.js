@@ -64,7 +64,9 @@ class MinTargets extends React.Component {
                 const rpLink = e.features[0].properties.rpLink
                 console.log('Clicked feature:', e.features[0])
                 console.log('OPEN LINK TO:', rpLink)
-                window.open(rpLink, '_blank')
+                if (window.confirm('Open HSL route planner?')) {
+                    window.open(rpLink, '_blank')
+                }
             })
         })
     }

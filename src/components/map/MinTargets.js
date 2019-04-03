@@ -58,6 +58,14 @@ class MinTargets extends React.Component {
                 'layout': this.labelLayout,
                 'paint': this.labelPaint,
             })
+            map.on('mouseenter', this.layerId, () => { map.getCanvas().style.cursor = 'pointer' })
+            map.on('mouseleave', this.layerId, () => { map.getCanvas().style.cursor = '' })
+            map.on('click', this.layerId, (e) => {
+                const rpLink = e.features[0].properties.rpLink
+                console.log('Clicked feature:', e.features[0])
+                console.log('OPEN LINK TO:', rpLink)
+                window.open(rpLink, '_blank')
+            })
         })
     }
 

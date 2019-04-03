@@ -41,6 +41,7 @@ const targetsReducer = (store = initialTargets, action) => {
             return {
                 ...store,
                 initialTargetsFC: updateDistancesToTargets(action.coords, store.initialTargetsFC),
+                kmTargetsFC: updateRPLinksToBirdKmTargets(action.coords, store.kmTargetsFC),
             }
         }
         default:
@@ -56,12 +57,32 @@ export const initializeTargets = () => {
     return { type: 'INITIALIZE_TARGETS', targetsFC: turf.asFeatureCollection(features) }
 }
 
+const getRoutePlannerLink = (userCoords, feat, transMode) => {
+    const baseUrl = 'https://reittiopas.hsl.fi/reitti/'
+    const toCoords = feat.properties.realCoords
+    const fromString = 'Current location ::' + userCoords[1] + ',' + userCoords[0]
+    const toString = feat.properties.name + '::' + toCoords[1] + ',' + toCoords[0]
+    const modeString = transMode === 'CAR' ? 'CAR,CAR_PARK' : transMode
+    const url = baseUrl + fromString + '/' + toString + '?modes=' + modeString
+    return encodeURI(url)
+}
+
 const updateDistancesToTargets = (userCoords, kmTargetsFC) => {
     const features = kmTargetsFC.features.map(feature => {
         const distance = turf.getDistance(userCoords, feature.properties.realCoords)
         return { ...feature, properties: { ...feature.properties, distance } }
     })
     return turf.asFeatureCollection(features)
+}
+
+const updateRPLinksToBirdKmTargets = (userCoords, kmTargetsFC) => {
+    const otherTargets = kmTargetsFC.features.filter(feat => feat.properties.transMode !== 'BIRD')
+    const birdTargets = kmTargetsFC.features.filter(feat => feat.properties.transMode === 'BIRD')
+    const birdTargetsWithRpLinks = birdTargets.map((feature) => {
+        const rpLink = getRoutePlannerLink(userCoords, feature, 'WALK')
+        return { ...feature, properties: { ...feature.properties, rpLink } }
+    })
+    return turf.asFeatureCollection(birdTargetsWithRpLinks.concat(otherTargets))
 }
 
 const createLabelPoints = (FC) => {
@@ -72,6 +93,7 @@ const createLabelPoints = (FC) => {
     })
     return turf.asFeatureCollection(features)
 }
+
 export const updateTargets = (userLocFC, initialTargetsFC, transMode, mapMode) => {
     return async (dispatch) => {
         const userCoords = userLocFC.features[0].geometry.coordinates
@@ -113,7 +135,8 @@ export const updateKmTargets = (userLocFC, initialTargetsFC, kmTargetsFC, transM
                     const bearing = turf.getBearing(userCoords, targetCoords)
                     const distance = await dt.getTravelDistance(userCoords, targetCoords, transMode)
                     const destCoords = turf.getDestination(userCoords, distance, bearing)
-                    return { ...feature, properties: { ...feature.properties, transMode }, geometry: { ...feature.geometry, coordinates: destCoords } }
+                    const rpLink = getRoutePlannerLink(userCoords, feature, transMode)
+                    return { ...feature, properties: { ...feature.properties, transMode, rpLink }, geometry: { ...feature.geometry, coordinates: destCoords } }
                 })
                 const featsResolved = await Promise.all(feats)
                 dispatch({ type: 'UPDATE_KM_TARGETS', kmTargetsFC: turf.asFeatureCollection(featsResolved) })
@@ -144,7 +167,8 @@ export const updateMinTargets = (userLocFC, initialTargetsFC, minTargetsFC, mode
                 const destCoords = turf.getDestination(userCoords, tts.median * 100, bearing)
                 const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
                 if (isNaN(destCoords[0])) return new Promise((resolve) => resolve(null))
-                const feat = turf.getCircle(destCoords, { ...feature.properties, radius, transMode, centreCoords: destCoords })
+                const rpLink = getRoutePlannerLink(userCoords, feature, transMode)
+                const feat = turf.getCircle(destCoords, { ...feature.properties, radius, transMode, rpLink, centreCoords: destCoords })
                 return new Promise((resolve) => resolve(feat))
             })
             const featsResolved = await Promise.all(feats)

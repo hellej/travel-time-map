@@ -9,7 +9,7 @@ class Zones extends React.Component {
     lineStyle = {
         'line-color': 'white',
         'line-width': 2,
-        'line-opacity': 0.25,
+        'line-opacity': 0.35,
     }
 
     componentDidMount() {

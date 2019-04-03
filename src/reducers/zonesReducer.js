@@ -1,5 +1,5 @@
 import { turf } from '../utils/index'
-import { updateKmTargets } from './targetsReducer'
+import { setTransMode } from './targetsReducer'
 import { updateMinTargets } from './targetsReducer'
 
 const circleRadiuses = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
@@ -53,7 +53,9 @@ export const setMapMode = (userLocFC, initialTargetsFC, kmTargetsFC, minTargetsF
         const originCoords = userLocFC.features[0].geometry.coordinates
         dispatch({ type: 'SET_MAP_MODE', mapMode, coords: originCoords })
         if (mapMode === 'distance') {
-            dispatch(updateKmTargets(userLocFC, initialTargetsFC, kmTargetsFC, transMode))
+            let mode = transMode
+            if (mode === 'PT' || mode === 'CAR') { mode = 'BIRD' }
+            dispatch(setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, mode, mapMode))
         } else {
             dispatch(updateMinTargets(userLocFC, initialTargetsFC, minTargetsFC, transMode))
         }

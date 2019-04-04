@@ -10,7 +10,6 @@ export const IconDiv = styled.div`
     border-radius: 8px;
     background-color: #000000b5;
     border: 1px solid white;
-    // margin: 4px 5px 0px 5px;
     margin: 5px 6px;
     padding: 9px 10px;
     display: table;
@@ -37,6 +36,10 @@ export const IconDiv = styled.div`
         border-color: grey;
         pointer-events: none;
     `}
+    @media (max-width: 370px) {
+        font-size: 25px;
+        padding: 7px 8px;
+    }
 `
 export const Bird = styled(FaDove)`
     font-size: 29px;

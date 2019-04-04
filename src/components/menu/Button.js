@@ -34,6 +34,10 @@ export const Button = styled.div.attrs(props => ({
       border-color: #46ff66;
     }
   `}
+  @media (max-width: 370px) {
+    font-size: 25px;
+    padding: 5px 11px;
+  }
 `
 
 Button.propTypes = {

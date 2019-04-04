@@ -35,13 +35,14 @@ const FlexRow = styled.div`
 class Menu extends Component {
 
     render() {
-        const { userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, zones, setMapMode, setTransMode, updateTargets } = this.props
+        const { userLocation, initialTargetsFC, kmTargetsFC, minTargetsFC, zones, setMapMode, setTransMode, updateTargets } = this.props
+        const { userLocFC, error } = userLocation
         const transMode = zones.transMode
         const mapMode = zones.mapMode
-        if (userLocFC.features.length === 0) {
+        if (error !== null) {
             return (
                 <LocationMissingMessage>
-                    Waiting for location...
+                    {error}
                 </LocationMissingMessage>
             )
         }
@@ -69,7 +70,7 @@ const mapStateToProps = (state) => ({
     initialTargetsFC: state.targets.initialTargetsFC,
     kmTargetsFC: state.targets.kmTargetsFC,
     minTargetsFC: state.targets.minTargetsFC,
-    userLocFC: state.userLocation.geoJSONFC,
+    userLocation: state.userLocation,
     zones: state.zones,
 })
 const ConnectedMenu = connect(mapStateToProps, { setTransMode, setMapMode, updateTargets })(Menu)

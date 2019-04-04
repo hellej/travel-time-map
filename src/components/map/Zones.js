@@ -13,9 +13,9 @@ class Zones extends React.Component {
     }
 
     componentDidMount() {
-        const { map, geoJSONFC } = this.props
+        const { map, userLocFC } = this.props
         map.once('load', () => {
-            map.addSource(this.layerId, { type: 'geojson', data: geoJSONFC })
+            map.addSource(this.layerId, { type: 'geojson', data: userLocFC })
             this.source = map.getSource(this.layerId)
             map.addLayer({
                 id: this.layerId,
@@ -45,14 +45,14 @@ class Zones extends React.Component {
     }
 
     componentDidUpdate = () => {
-        const { map, geoJSONFC, mapMode } = this.props
+        const { map, userLocFC, mapMode } = this.props
         const lineColor = mapMode === 'distance' ? '#dde6ff' : 'white'
         if (this.source !== undefined) {
-            this.source.setData(geoJSONFC)
+            this.source.setData(userLocFC)
             map.setPaintProperty(this.layerId, 'line-color', lineColor)
         } else {
             this.props.map.once('sourcedata', () => {
-                this.source.setData(this.props.geoJSONFC)
+                this.source.setData(this.props.userLocFC)
                 map.setPaintProperty(this.layerId, 'line-color', lineColor)
             })
         }
@@ -64,7 +64,7 @@ class Zones extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    geoJSONFC: state.zones.zonesFC,
+    userLocFC: state.zones.zonesFC,
     mapMode: state.zones.mapMode,
 })
 

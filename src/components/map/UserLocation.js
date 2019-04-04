@@ -16,9 +16,9 @@ class UserLocation extends React.Component {
     componentDidMount() {
         // this.props.mockUserLocation()
         this.props.startTrackingUserLocation()
-        const { map, geoJSONFC } = this.props
+        const { map, userLocFC } = this.props
         map.once('load', () => {
-            map.addSource(this.layerId, { type: 'geojson', data: geoJSONFC })
+            map.addSource(this.layerId, { type: 'geojson', data: userLocFC })
             this.source = map.getSource(this.layerId)
             map.addLayer({ id: this.layerId, source: this.layerId, type: 'circle', paint: this.circleStyle })
         })
@@ -26,9 +26,9 @@ class UserLocation extends React.Component {
 
     componentDidUpdate = () => {
         if (this.source !== undefined) {
-            this.source.setData(this.props.geoJSONFC)
+            this.source.setData(this.props.userLocFC)
         } else {
-            this.props.map.once('sourcedata', () => this.source.setData(this.props.geoJSONFC))
+            this.props.map.once('sourcedata', () => this.source.setData(this.props.userLocFC))
         }
     }
 
@@ -38,7 +38,7 @@ class UserLocation extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    geoJSONFC: state.userLocation.geoJSONFC
+    userLocFC: state.userLocation.userLocFC
 })
 const mapDispatchToProps = {
     startTrackingUserLocation,

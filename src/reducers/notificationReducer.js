@@ -1,7 +1,7 @@
 
 const initialNotification = {
     text: null,
-    style: null,
+    look: null,
 }
 let notifTimeout
 
@@ -9,7 +9,7 @@ const notificationReducer = (store = initialNotification, action) => {
 
     switch (action.type) {
         case 'SHOWNOTIF':
-            return { text: action.text, style: action.style }
+            return { text: action.text, look: action.look }
 
         case 'KM_QUERY_STARTED':
             return { text: 'Loading distances...' }
@@ -29,11 +29,11 @@ const notificationReducer = (store = initialNotification, action) => {
     }
 }
 
-export const showNotification = (text, style, notiftime) => {
+export const showNotification = (text, look, notiftime) => {
     return async (dispatch) => {
         dispatch(rmNotification())
         await new Promise(resolve => notifTimeout = setTimeout(resolve, 120))
-        dispatch({ type: 'SHOWNOTIF', text, style })
+        dispatch({ type: 'SHOWNOTIF', text, look })
         clearTimeout(notifTimeout)
         await new Promise(resolve => notifTimeout = setTimeout(resolve, notiftime * 1000))
         dispatch(rmNotification())

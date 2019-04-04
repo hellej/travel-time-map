@@ -1,5 +1,6 @@
 import { turf } from '../utils/index'
 import poolLocations from '../poolLocations.json'
+import { showNotification } from './notificationReducer'
 import * as dt from '../services/digiTransit'
 
 const emptyFC = turf.asFeatureCollection([])
@@ -139,7 +140,11 @@ export const updateKmTargets = (userLocFC, initialTargetsFC, kmTargetsFC, transM
                     return { ...feature, properties: { ...feature.properties, transMode, rpLink }, geometry: { ...feature.geometry, coordinates: destCoords } }
                 })
                 const featsResolved = await Promise.all(feats)
-                dispatch({ type: 'UPDATE_KM_TARGETS', kmTargetsFC: turf.asFeatureCollection(featsResolved) })
+                if (featsResolved.length === 0) {
+                    dispatch(showNotification("Couldn't get distances", 'error', 4))
+                } else {
+                    dispatch({ type: 'UPDATE_KM_TARGETS', kmTargetsFC: turf.asFeatureCollection(featsResolved) })
+                }
             }
         }
     }
@@ -173,7 +178,11 @@ export const updateMinTargets = (userLocFC, initialTargetsFC, minTargetsFC, mode
             })
             const featsResolved = await Promise.all(feats)
             const featsNotNull = featsResolved.filter(feat => feat !== null)
-            dispatch({ type: 'UPDATE_MIN_TARGETS', minTargetsFC: turf.asFeatureCollection(featsNotNull) })
+            if (featsNotNull.length === 0) {
+                dispatch(showNotification("Couldn't get travel times", 'error', 4))
+            } else {
+                dispatch({ type: 'UPDATE_MIN_TARGETS', minTargetsFC: turf.asFeatureCollection(featsNotNull) })
+            }
         }
     }
 }

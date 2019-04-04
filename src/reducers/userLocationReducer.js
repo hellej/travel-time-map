@@ -3,25 +3,33 @@ import { turf } from '../utils/index'
 const geoOptions = {
   enableHighAccuracy: true,
   maximumAge: 30000,
-  timeout: 27000,
+  timeout: 6000,
 }
 const initialUserLocation = {
   expireTime: '',
   error: null,
-  geoJSONFC: turf.asFeatureCollection([]),
+  userLocFC: turf.asFeatureCollection([]),
   userLocHistory: [],
-}
-const geoError = () => {
-  console.log('no location available')
 }
 
 const userLocationReducer = (store = initialUserLocation, action) => {
 
   switch (action.type) {
+    case 'START_TRACKING_USER_LOCATION':
+      return {
+        ...store,
+        error: 'Waiting for location...'
+      }
+    case 'ERROR_IN_POSITIONING':
+      return {
+        ...store,
+        error: 'Have you enabled location services?'
+      }
     case 'UPDATE_USER_LOCATION': {
       return {
         ...store,
-        geoJSONFC: action.geoJSONFC,
+        error: null,
+        userLocFC: action.userLocFC,
         userLocHistory: store.userLocHistory.concat([action.coords]),
       }
     }
@@ -38,11 +46,11 @@ export const mockUserLocation = () => {
     await new Promise(resolve => setTimeout(resolve, 2000))
     const lng = 24.93312835
     const lat = 60.16910312
-    const geoJSONFC = turf.asFeatureCollection([turf.asPoint([lng, lat])])
+    const userLocFC = turf.asFeatureCollection([turf.asPoint([lng, lat])])
     dispatch({
       type: 'UPDATE_USER_LOCATION',
       coords: [lng, lat],
-      geoJSONFC,
+      userLocFC,
     })
   }
 }
@@ -55,14 +63,17 @@ export const startTrackingUserLocation = () => {
 
 export const updateUserLocation = () => {
   return (dispatch) => {
+    const geoError = () => {
+      dispatch({ type: 'ERROR_IN_POSITIONING' })
+    }
     const watchPosition = (pos) => {
       const lng = pos.coords.longitude
       const lat = pos.coords.latitude
-      const geoJSONFC = turf.asFeatureCollection([turf.asPoint([lng, lat])])
+      const userLocFC = turf.asFeatureCollection([turf.asPoint([lng, lat])])
       dispatch({
         type: 'UPDATE_USER_LOCATION',
         coords: [lng, lat],
-        geoJSONFC,
+        userLocFC,
       })
     }
     navigator.geolocation.watchPosition(watchPosition, geoError, geoOptions)

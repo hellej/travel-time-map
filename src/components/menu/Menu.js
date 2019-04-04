@@ -15,6 +15,7 @@ const LocationMissingMessage = styled.div`
     letter-spacing: 1px;
     font-weight: 300;
     height: 50vh;
+    max-width: 92%;
 `
 const OuterFlex = styled.div`
     display: flex;

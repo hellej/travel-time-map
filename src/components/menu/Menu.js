@@ -38,8 +38,8 @@ class Menu extends Component {
     render() {
         const { userLocation, initialTargetsFC, kmTargetsFC, minTargetsFC, zones, setMapMode, setTransMode, updateTargets } = this.props
         const { userLocFC, error } = userLocation
-        const transMode = zones.transMode
-        const mapMode = zones.mapMode
+        const { transMode, mapMode } = zones
+
         if (error !== null) {
             return (
                 <LocationMissingMessage>

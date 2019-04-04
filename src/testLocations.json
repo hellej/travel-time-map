@@ -16,7 +16,7 @@
 { "type": "Feature", "properties": { "fid": 12, "name": "Siltamäki", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.989515, 60.274831 ] } },
 { "type": "Feature", "properties": { "fid": 13, "name": "Mäkelänrinne", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.947843, 60.199694 ] } },
 { "type": "Feature", "properties": { "fid": 15, "name": "Leppävaara", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.802685, 60.225441 ] } },
-{ "type": "Feature", "properties": { "fid": 16, "name": "Tapiola", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.80725, 60.178498 ] } },
+{ "type": "Feature", "properties": { "fid": 16, "name": "Tapiola", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.80725, 60.178498 ] } },
 { "type": "Feature", "properties": { "fid": null, "name": "Kumpula", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.958890133798754, 60.208759284619084 ] } },
 { "type": "Feature", "properties": { "fid": null, "name": "Stadikka", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.930442210606927, 60.188816633600737 ] } }
 ]

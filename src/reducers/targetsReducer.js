@@ -151,7 +151,7 @@ export const updateMinTargets = (userLocFC, initialTargetsFC, minTargetsFC, mode
             dispatch({ type: 'NO_USER_LOCATION' })
             return
         }
-        const transMode = mode === 'BIRD' ? 'WALK' : mode
+        const transMode = mode === 'BIRD' ? 'PT' : mode
         dispatch({ type: 'SET_TRANS_MODE', transMode })
 
         const alreadyGot = minTargetsFC.features.filter(feat => feat.properties.transMode === transMode)

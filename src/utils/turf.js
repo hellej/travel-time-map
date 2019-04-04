@@ -4,6 +4,7 @@ import circle from '@turf/circle'
 import destination from '@turf/destination'
 import distance from '@turf/distance'
 import bearing from '@turf/bearing'
+import booleanWithin from '@turf/boolean-within'
 import { featureCollection } from '@turf/helpers'
 import { point } from '@turf/helpers'
 
@@ -40,6 +41,10 @@ export const getDestination = (originCoords, distance, bearing) => {
   const point = asPoint(originCoords)
   const dest = destination(point, distance, bearing, { units: 'meters' })
   return dest.geometry.coordinates
+}
+
+export const within = (feat, feat2) => {
+  return booleanWithin(feat, feat2)
 }
 
 export const combineFCs = (fc1, fc2) => {

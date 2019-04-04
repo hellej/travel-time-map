@@ -1,4 +1,5 @@
 import { turf } from '../utils/index'
+import extent from '../extent.json'
 
 const geoOptions = {
   enableHighAccuracy: true,
@@ -26,9 +27,10 @@ const userLocationReducer = (store = initialUserLocation, action) => {
         error: 'Have you enabled location services?'
       }
     case 'UPDATE_USER_LOCATION': {
+      const within = withinSupportedArea(action.userLocFC)
       return {
         ...store,
-        error: null,
+        error: within ? null : 'You seem to be outside the supported area',
         userLocFC: action.userLocFC,
         userLocHistory: store.userLocHistory.concat([action.coords]),
       }
@@ -78,6 +80,12 @@ export const updateUserLocation = () => {
     }
     navigator.geolocation.watchPosition(watchPosition, geoError, geoOptions)
   }
+}
+
+const withinSupportedArea = (userLocFC) => {
+  const userFeat = userLocFC.features[0]
+  const extentFeat = extent.features[0]
+  return turf.within(userFeat, extentFeat)
 }
 
 export default userLocationReducer

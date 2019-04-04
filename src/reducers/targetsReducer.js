@@ -1,5 +1,5 @@
 import { turf } from '../utils/index'
-import testLocations from '../testLocations.json'
+import poolLocations from '../poolLocations.json'
 import * as dt from '../services/digiTransit'
 
 const emptyFC = turf.asFeatureCollection([])
@@ -50,7 +50,7 @@ const targetsReducer = (store = initialTargets, action) => {
 }
 
 export const initializeTargets = () => {
-    const features = testLocations.features.map(feat => ({
+    const features = poolLocations.features.map(feat => ({
         ...feat,
         properties: { ...feat.properties, transMode: 'BIRD', name: feat.properties.name, realCoords: feat.geometry.coordinates }
     }))

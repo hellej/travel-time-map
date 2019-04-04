@@ -21,11 +21,13 @@ const userLocationReducer = (store = initialUserLocation, action) => {
         ...store,
         error: 'Waiting for location...'
       }
-    case 'ERROR_IN_POSITIONING':
+    case 'ERROR_IN_POSITIONING': {
+      const error = store.userLocHistory.length > 0 ? null : 'Have you enabled location services?'
       return {
         ...store,
-        error: 'Have you enabled location services?'
+        error,
       }
+    }
     case 'UPDATE_USER_LOCATION': {
       const within = withinSupportedArea(action.userLocFC)
       return {

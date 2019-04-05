@@ -4,7 +4,7 @@ import extent from '../extent.json'
 const geoOptions = {
   enableHighAccuracy: true,
   maximumAge: 30000,
-  timeout: 6000,
+  timeout: 8000,
 }
 const initialUserLocation = {
   expireTime: '',

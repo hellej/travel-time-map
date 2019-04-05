@@ -2,6 +2,7 @@ import { turf } from '../utils/index'
 import poolLocations from '../poolLocations.json'
 import { showNotification } from './notificationReducer'
 import * as dt from '../services/digiTransit'
+import { utils } from './../utils/index'
 
 const emptyFC = turf.asFeatureCollection([])
 
@@ -35,16 +36,15 @@ const targetsReducer = (store = initialTargets, action) => {
             return {
                 ...store,
                 minTargetsFC,
-                minTargetLabelsFC: createLabelPoints(minTargetsFC),
+                minTargetLabelsFC: utils.createLabelPoints(minTargetsFC),
             }
         }
-        case 'UPDATE_USER_LOCATION': {
+        case 'UPDATE_USER_LOCATION':
             return {
                 ...store,
-                initialTargetsFC: updateDistancesToTargets(action.coords, store.initialTargetsFC),
-                kmTargetsFC: updateRPLinksToBirdKmTargets(action.coords, store.kmTargetsFC),
+                initialTargetsFC: utils.updateDistancesToTargets(action.coords, store.initialTargetsFC),
+                kmTargetsFC: utils.updateRoutePlannerLinksToTargets(action.coords, store.kmTargetsFC),
             }
-        }
         default:
             return store
     }
@@ -58,48 +58,12 @@ export const initializeTargets = () => {
     return { type: 'INITIALIZE_TARGETS', targetsFC: turf.asFeatureCollection(features) }
 }
 
-const getRoutePlannerLink = (userCoords, feat, transMode) => {
-    const baseUrl = 'https://reittiopas.hsl.fi/reitti/'
-    const toCoords = feat.properties.realCoords
-    const fromString = 'Current location ::' + userCoords[1] + ',' + userCoords[0]
-    const toString = feat.properties.name + '::' + toCoords[1] + ',' + toCoords[0]
-    const modeString = transMode === 'CAR' ? 'CAR,CAR_PARK' : transMode
-    const url = baseUrl + fromString + '/' + toString + '?modes=' + modeString
-    return encodeURI(url)
-}
-
-const updateDistancesToTargets = (userCoords, kmTargetsFC) => {
-    const features = kmTargetsFC.features.map(feature => {
-        const distance = turf.getDistance(userCoords, feature.properties.realCoords)
-        return { ...feature, properties: { ...feature.properties, distance } }
-    })
-    return turf.asFeatureCollection(features)
-}
-
-const updateRPLinksToBirdKmTargets = (userCoords, kmTargetsFC) => {
-    const otherTargets = kmTargetsFC.features.filter(feat => feat.properties.transMode !== 'BIRD')
-    const birdTargets = kmTargetsFC.features.filter(feat => feat.properties.transMode === 'BIRD')
-    const birdTargetsWithRpLinks = birdTargets.map((feature) => {
-        const rpLink = getRoutePlannerLink(userCoords, feature, 'WALK')
-        return { ...feature, properties: { ...feature.properties, rpLink } }
-    })
-    return turf.asFeatureCollection(birdTargetsWithRpLinks.concat(otherTargets))
-}
-
-const createLabelPoints = (FC) => {
-    const features = FC.features.map(feature => {
-        const centreCoords = feature.properties.centreCoords
-        const offsetCoords = turf.getDestination(centreCoords, feature.properties.radius, 90)
-        return turf.asPoint(offsetCoords, feature.properties)
-    })
-    return turf.asFeatureCollection(features)
-}
-
-export const updateTargets = (userLocFC, initialTargetsFC, transMode, mapMode) => {
+export const resetTargets = (userLocFC, initialTargetsFC, transMode, mapMode) => {
     return async (dispatch) => {
-        const userCoords = userLocFC.features[0].geometry.coordinates
-        const targetsFC = updateDistancesToTargets(userCoords, initialTargetsFC)
-        dispatch({ type: 'INITIALIZE_TARGETS', targetsFC })
+        const userCoords = turf.getFirstPointCoords(userLocFC)
+        const targetsFC = utils.updateDistancesToTargets(userCoords, initialTargetsFC)
+        const targetsLinksFC = utils.updateRoutePlannerLinksToTargets(userCoords, targetsFC)
+        dispatch({ type: 'INITIALIZE_TARGETS', targetsFC: targetsLinksFC })
         dispatch(setTransMode(userLocFC, targetsFC, targetsFC, emptyFC, transMode, mapMode))
     }
 }
@@ -107,11 +71,9 @@ export const updateTargets = (userLocFC, initialTargetsFC, transMode, mapMode) =
 export const setTransMode = (userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, mapMode) => {
     return async (dispatch) => {
         dispatch({ type: 'SET_TRANS_MODE', transMode })
-        if (mapMode === 'distance') {
-            dispatch(updateKmTargets(userLocFC, initialTargetsFC, kmTargetsFC, transMode))
-        } else {
-            dispatch(updateMinTargets(userLocFC, initialTargetsFC, minTargetsFC, transMode))
-        }
+        mapMode === 'distance'
+            ? dispatch(updateKmTargets(userLocFC, initialTargetsFC, kmTargetsFC, transMode))
+            : dispatch(updateMinTargets(userLocFC, initialTargetsFC, minTargetsFC, transMode))
     }
 }
 
@@ -121,7 +83,8 @@ export const updateKmTargets = (userLocFC, initialTargetsFC, kmTargetsFC, transM
             dispatch({ type: 'NO_USER_LOCATION' })
             return
         }
-        const userCoords = userLocFC.features[0].geometry.coordinates
+        const userCoords = turf.getFirstPointCoords(userLocFC)
+        // Check if km targets with the selected transport mode were already got
         const alreadyGot = kmTargetsFC.features.filter(feat => feat.properties.transMode === transMode)
         if (alreadyGot.length === 0) {
             if (transMode === 'BIRD') {
@@ -132,11 +95,11 @@ export const updateKmTargets = (userLocFC, initialTargetsFC, kmTargetsFC, transM
             } else {
                 dispatch({ type: 'KM_QUERY_STARTED' })
                 const feats = await initialTargetsFC.features.map(async (feature) => {
-                    const targetCoords = feature.properties.realCoords
-                    const bearing = turf.getBearing(userCoords, targetCoords)
-                    const distance = await dt.getTravelDistance(userCoords, targetCoords, transMode)
+                    const realCoords = feature.properties.realCoords
+                    const bearing = turf.getBearing(userCoords, realCoords)
+                    const distance = await dt.getTravelDistance(userCoords, realCoords, transMode)
                     const destCoords = turf.getDestination(userCoords, distance, bearing)
-                    const rpLink = getRoutePlannerLink(userCoords, feature, transMode)
+                    const rpLink = utils.getRoutePlannerLink(userCoords, feature, transMode)
                     return { ...feature, properties: { ...feature.properties, transMode, rpLink }, geometry: { ...feature.geometry, coordinates: destCoords } }
                 })
                 const featsResolved = await Promise.all(feats)
@@ -156,23 +119,22 @@ export const updateMinTargets = (userLocFC, initialTargetsFC, minTargetsFC, mode
             dispatch({ type: 'NO_USER_LOCATION' })
             return
         }
+        const userCoords = turf.getFirstPointCoords(userLocFC)
         const transMode = mode === 'BIRD' ? 'PT' : mode
         dispatch({ type: 'SET_TRANS_MODE', transMode })
-
+        // Check if min targets with the selected transport mode were already got
         const alreadyGot = minTargetsFC.features.filter(feat => feat.properties.transMode === transMode)
         if (alreadyGot.length === 0) {
             dispatch({ type: 'MIN_QUERY_STARTED' })
-            const features = initialTargetsFC.features.sort((feat1, feat2) => feat1.properties.distance - feat2.properties.distance)
-            const closeFeatures = features.slice(0, 9)
-            const userCoords = userLocFC.features[0].geometry.coordinates
+            const closeFeatures = utils.getNClosestFeats(initialTargetsFC, 10)
             const feats = closeFeatures.map(async (feature) => {
-                const targetCoords = feature.properties.realCoords
-                const tts = await dt.getTravelTimes(userCoords, targetCoords, transMode)
-                const bearing = turf.getBearing(userCoords, targetCoords)
+                const realCoords = feature.properties.realCoords
+                const tts = await dt.getTravelTimes(userCoords, realCoords, transMode)
+                if (isNaN(tts.mean)) return new Promise((resolve) => resolve(null))
+                const bearing = turf.getBearing(userCoords, realCoords)
                 const destCoords = turf.getDestination(userCoords, tts.median * 100, bearing)
                 const radius = tts.range > 2 ? (tts.range * 100) / 2 : 130
-                if (isNaN(destCoords[0])) return new Promise((resolve) => resolve(null))
-                const rpLink = getRoutePlannerLink(userCoords, feature, transMode)
+                const rpLink = utils.getRoutePlannerLink(userCoords, feature, transMode)
                 const feat = turf.getCircle(destCoords, { ...feature.properties, radius, transMode, rpLink, centreCoords: destCoords })
                 return new Promise((resolve) => resolve(feat))
             })

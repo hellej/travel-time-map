@@ -50,3 +50,7 @@ export const within = (feat, feat2) => {
 export const combineFCs = (fc1, fc2) => {
   return asFeatureCollection(fc1.features.concat(fc2.features))
 }
+
+export const getFirstPointCoords = (FC) => {
+  return FC.features[0].geometry.coordinates
+}

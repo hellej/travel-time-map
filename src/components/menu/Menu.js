@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { setTransMode, updateTargets } from '../../reducers/targetsReducer'
+import { setTransMode, resetTargets } from '../../reducers/targetsReducer'
 import { setMapMode } from '../../reducers/zonesReducer'
 import Notification from './../Notification'
 import { Button } from './Button'
@@ -36,7 +36,7 @@ const FlexRow = styled.div`
 class Menu extends Component {
 
     render() {
-        const { userLocation, initialTargetsFC, kmTargetsFC, minTargetsFC, zones, setMapMode, setTransMode, updateTargets } = this.props
+        const { userLocation, initialTargetsFC, kmTargetsFC, minTargetsFC, zones, setMapMode, setTransMode, resetTargets } = this.props
         const { userLocFC, error } = userLocation
         const { transMode, mapMode } = zones
 
@@ -53,7 +53,7 @@ class Menu extends Component {
                 <FlexRow>
                     <Button active={mapMode === 'distance'} onClick={() => setMapMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, 'distance')}>KM</Button>
                     <Button active={mapMode === 'duration'} onClick={() => setMapMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, transMode, 'duration')}>MIN</Button>
-                    <SmallIcon onClick={() => updateTargets(userLocFC, initialTargetsFC, transMode, mapMode)}> <Refresh /> </SmallIcon>
+                    <SmallIcon onClick={() => resetTargets(userLocFC, initialTargetsFC, transMode, mapMode)}> <Refresh /> </SmallIcon>
                 </FlexRow>
                 <FlexRow>
                     <IconDiv onClick={() => setTransMode(userLocFC, initialTargetsFC, kmTargetsFC, minTargetsFC, 'BIRD', mapMode)} active={transMode === 'BIRD'} disabled={mapMode === 'duration'}> <Bird /> </IconDiv>
@@ -74,6 +74,7 @@ const mapStateToProps = (state) => ({
     userLocation: state.userLocation,
     zones: state.zones,
 })
-const ConnectedMenu = connect(mapStateToProps, { setTransMode, setMapMode, updateTargets })(Menu)
+
+const ConnectedMenu = connect(mapStateToProps, { setTransMode, setMapMode, resetTargets })(Menu)
 
 export default ConnectedMenu

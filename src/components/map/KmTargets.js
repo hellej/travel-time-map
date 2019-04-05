@@ -63,8 +63,7 @@ class KmTargets extends React.Component {
             map.on('mouseleave', this.layerId, () => { map.getCanvas().style.cursor = '' })
             map.on('click', this.layerId, (e) => {
                 const rpLink = e.features[0].properties.rpLink
-                console.log('Clicked feature:', e.features[0])
-                console.log('OPEN LINK TO:', rpLink)
+                console.log('Open link to:', rpLink)
                 if (window.confirm('Open HSL route planner?')) {
                     window.open(rpLink, '_blank')
                 }

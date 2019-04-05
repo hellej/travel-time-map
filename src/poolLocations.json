@@ -18,6 +18,16 @@
 { "type": "Feature", "properties": { "fid": 15, "name": "Leppävaara", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.802685, 60.225441 ] } },
 { "type": "Feature", "properties": { "fid": 16, "name": "Tapiola", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.80725, 60.178498 ] } },
 { "type": "Feature", "properties": { "fid": null, "name": "Kumpula", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.958890133798754, 60.208759284619084 ] } },
-{ "type": "Feature", "properties": { "fid": null, "name": "Stadikka", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.930442210606927, 60.188816633600737 ] } }
+{ "type": "Feature", "properties": { "fid": null, "name": "Stadikka", "operating": "no" }, "geometry": { "type": "Point", "coordinates": [ 24.930442210606927, 60.188816633600737 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Lauttasaari", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.862681457810947, 60.15799391753859 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Kauniainen", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.709997631102336, 60.216252510395122 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Myyrmäki", "operating": null }, "geometry": { "type": "Point", "coordinates": [ 24.851227599362428, 60.265358487317449 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Martinlaakso", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.845030018305192, 60.276116554524165 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Tikkurila", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.031036809118731, 60.298710110795696 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Korso", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.069989563380911, 60.358102635045746 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Tuusula", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.029904056213965, 60.400998392496156 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Järvenpää", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 25.090525935135712, 60.481954622507899 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Espoonlahti", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.659333735758032, 60.146421074685463 ] } },
+{ "type": "Feature", "properties": { "fid": null, "name": "Keski-Espoo", "operating": "yes" }, "geometry": { "type": "Point", "coordinates": [ 24.659422914243557, 60.209894655785831 ] } }
 ]
 }

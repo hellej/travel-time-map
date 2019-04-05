@@ -27,7 +27,7 @@ class Map extends React.Component {
       container: this.mapContainer,
       style: BASEMAPS['JustBlack'].url,
       center: initialMapCenter,
-      zoom: 10,
+      zoom: 8,
       boxZoom: false,
       trackResize: true
     })

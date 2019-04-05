@@ -15,8 +15,11 @@ const mapReducer = (store = initialMapState, action) => {
     case 'INITIALIZE_MAP':
       return { ...store, initialized: true }
 
-    case 'ZOOM_TO_FEATURE':
-      return { ...store, zoomToBbox: turf.getBbox(turf.getBuffer(action.feature, 1000)) }
+    case 'UPDATE_MIN_TARGETS':
+      return { ...store, zoomToBbox: turf.getBbox(turf.getBuffer(action.minTargetsFC, 1500)) }
+
+    case 'UPDATE_KM_TARGETS':
+      return { ...store, zoomToBbox: turf.getBbox(turf.getBuffer(action.kmTargetsFC, 1500)) }
 
     case 'UPDATE_CAMERA':
       return { ...store, center: action.center, zoom: action.zoom }

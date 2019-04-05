@@ -27,7 +27,7 @@ const FlexRow = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     width: max-content;
-    margin: 6px 0 0 0;
+    margin: 2px 0 0 0;
     justify-content: flex-start;
     align-items: center;
     pointer-events: auto;

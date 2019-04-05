@@ -18,8 +18,8 @@ $ npm start
 Update your Mapbox access token to `src/components/map/Map.js`<br>
 Open browser to http://localhost:3000/
 
-## License
-[MIT](LICENSE)
-
 ## UI
 <img src="images/uimakartta-ui.png" width="300">
+
+## License
+[MIT](LICENSE)

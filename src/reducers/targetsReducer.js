@@ -89,7 +89,8 @@ export const updateKmTargets = (userLocFC, initialTargetsFC, kmTargetsFC, transM
         if (alreadyGot.length === 0) {
             if (transMode === 'BIRD') {
                 const feats = initialTargetsFC.features.map((feature) => {
-                    return { ...feature, properties: { ...feature.properties, transMode }, geometry: { ...feature.geometry, coordinates: feature.properties.realCoords } }
+                    const distance = turf.getDistance(userCoords, feature.properties.realCoords)
+                    return { ...feature, properties: { ...feature.properties, transMode, distance }, geometry: { ...feature.geometry, coordinates: feature.properties.realCoords } }
                 })
                 dispatch({ type: 'UPDATE_KM_TARGETS', kmTargetsFC: turf.asFeatureCollection(feats) })
             } else {
@@ -100,7 +101,7 @@ export const updateKmTargets = (userLocFC, initialTargetsFC, kmTargetsFC, transM
                     const distance = await dt.getTravelDistance(userCoords, realCoords, transMode)
                     const destCoords = turf.getDestination(userCoords, distance, bearing)
                     const rpLink = utils.getRoutePlannerLink(userCoords, feature, transMode)
-                    return { ...feature, properties: { ...feature.properties, transMode, rpLink }, geometry: { ...feature.geometry, coordinates: destCoords } }
+                    return { ...feature, properties: { ...feature.properties, transMode, distance, rpLink }, geometry: { ...feature.geometry, coordinates: destCoords } }
                 })
                 const featsResolved = await Promise.all(feats)
                 if (featsResolved.length === 0) {

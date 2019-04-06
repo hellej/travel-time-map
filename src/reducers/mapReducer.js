@@ -1,4 +1,4 @@
-import { turf } from '../utils/index'
+import { turf, utils } from '../utils/index'
 
 const initialMapState = {
   initialized: false,
@@ -18,8 +18,10 @@ const mapReducer = (store = initialMapState, action) => {
     case 'UPDATE_MIN_TARGETS':
       return { ...store, zoomToBbox: turf.getBbox(turf.getBuffer(action.minTargetsFC, 1500)) }
 
-    case 'UPDATE_KM_TARGETS':
-      return { ...store, zoomToBbox: turf.getBbox(turf.getBuffer(action.kmTargetsFC, 1500)) }
+    case 'UPDATE_KM_TARGETS': {
+      const FC = turf.asFeatureCollection(utils.getNClosestFeats(action.kmTargetsFC, 10))
+      return { ...store, zoomToBbox: turf.getBbox(turf.getBuffer(FC, 1600)) }
+    }
 
     case 'UPDATE_CAMERA':
       return { ...store, center: action.center, zoom: action.zoom }

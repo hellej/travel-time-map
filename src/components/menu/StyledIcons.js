@@ -32,8 +32,8 @@ export const IconDiv = styled.div`
         }
     `}
     ${props => props.disabled === true && css`
-        color: grey;
-        border-color: grey;
+        color: #484848;
+        border-color: #484848;
         pointer-events: none;
     `}
     @media (max-width: 370px) {

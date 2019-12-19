@@ -127,7 +127,7 @@ export const updateMinTargets = (userLocFC, initialTargetsFC, minTargetsFC, mode
         const alreadyGot = minTargetsFC.features.filter(feat => feat.properties.transMode === transMode)
         if (alreadyGot.length === 0) {
             dispatch({ type: 'MIN_QUERY_STARTED' })
-            const closeFeatures = utils.getNClosestFeats(initialTargetsFC, 10)
+            const closeFeatures = utils.getNClosestFeats(initialTargetsFC, 15)
             const feats = closeFeatures.map(async (feature) => {
                 const realCoords = feature.properties.realCoords
                 const tts = await dt.getTravelTimes(userCoords, realCoords, transMode)

@@ -14,7 +14,9 @@ export const getRoutePlannerLink = (userCoords, feat, transMode) => {
     const toCoords = feat.properties.realCoords
     const fromString = 'Current location ::' + userCoords[1] + ',' + userCoords[0]
     const toString = feat.properties.name + '::' + toCoords[1] + ',' + toCoords[0]
-    const modeString = transMode === 'CAR' ? 'CAR,CAR_PARK' : transMode
+    const modeString = transMode === 'CAR' ? 'CAR,CAR_PARK' : transMode === 'PT'
+        ? 'BUS,TRAM,RAIL,SUBWAY,FERRY,PUBLIC_TRANSPORT'
+        : transMode
     const url = baseUrl + fromString + '/' + toString + '?modes=' + modeString
     return encodeURI(url)
 }
